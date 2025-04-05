@@ -1462,7 +1462,6 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
   font-size: ${It(26,20)};
   font-weight: 500;
   border: transparent;
-  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.1), inset 0 -2px 4px rgba(0, 0, 0, 0.2);
   
   svg {
     font-size: ${It(36,28)};
