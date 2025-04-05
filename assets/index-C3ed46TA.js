@@ -790,7 +790,7 @@ Error generating stack: `+i.message+`
     transform: translateY(0) scaleY(3.5) scaleX(1.5);
     visibility: visible;
   }
-`,ha={landing:{description:"A comprehensive landing page for Green Harvest, showcasing the brand's mission and products.",image:qb,title:"LANDING",link:"https://matteblacck.github.io/greenharvest-landing/"},notes:{description:"A note-taking application that allows users to organize their thoughts and ideas efficiently.",image:Pb,title:"NOTES",link:""},manager:{description:"A task management tool designed to help users track and complete their daily tasks effectively.",image:Gb,title:"TASK MANAGER",link:""}};function U6(){const n=" PORTFOL!O ";X.useEffect(()=>{const u=document.querySelectorAll(".hiddenImage"),f=document.querySelectorAll(".hiddenImage2"),d=document.querySelectorAll(".hidden2"),h=new IntersectionObserver((y,b)=>{y.forEach(S=>{S.isIntersecting&&(S.target.classList.add("visibleImage"),b.unobserve(S.target))})},{threshold:.2}),m=new IntersectionObserver((y,b)=>{y.forEach(S=>{S.isIntersecting&&(S.target.classList.add("visibleImage2"),b.unobserve(S.target))})},{threshold:.2}),g=new IntersectionObserver((y,b)=>{y.forEach(S=>{S.isIntersecting&&(S.target.classList.add("visible2"),b.unobserve(S.target))})},{threshold:.5});return u.forEach(y=>h.observe(y)),f.forEach(y=>m.observe(y)),d.forEach(y=>g.observe(y)),()=>{u.forEach(y=>h.unobserve(y)),f.forEach(y=>m.unobserve(y)),d.forEach(y=>g.unobserve(y))}},[]);const[a,s]=X.useState(null),l=()=>{s(null)};return X.useEffect(()=>(a?(document.documentElement.style.overflowY="hidden",document.body.style.overflowY="hidden"):(document.documentElement.style.overflowY="auto",document.body.style.overflowY="auto"),()=>{document.documentElement.style.overflowY="auto",document.body.style.overflowY="auto"}),[a]),R.jsxs(R.Fragment,{children:[R.jsxs(C6,{id:"portfolio",children:[R.jsx(N6,{style:{marginTop:"50vh",transform:"rotate(-28deg)",opacity:"0.4"},children:R.jsx(j6,{reverse:!1,children:R.jsx(V6,{children:n.repeat(1e3)})})}),R.jsxs(R6,{children:[R.jsx(L6,{className:"hiddenImage",children:"MY PORTFOLIO"}),R.jsxs(Mf,{children:[R.jsx(Of,{image:qb,className:"hiddenImage",id:"landing",onClick:()=>s(ha.landing),layoutId:`portfolio-image-${ha.landing.title}`}),R.jsx(Df,{style:{left:"20vw"},children:R.jsx(Cf,{className:"hidden2",children:"LANDING"})})]}),R.jsxs(Mf,{className:"d-flex justify-content-end",children:[R.jsx(Of,{image:Pb,className:"hiddenImage2",id:"notes",onClick:()=>s(ha.notes),layoutId:`portfolio-image-${ha.notes.title}`}),R.jsx(Df,{style:{right:"30vw"},children:R.jsx(Cf,{className:"hidden2",children:"NOTES"})})]}),R.jsxs(Mf,{className:"d-flex justify-content-start",children:[R.jsx(Of,{image:Gb,className:"hiddenImage",id:"manager",onClick:()=>s(ha.manager),layoutId:`portfolio-image-${ha.manager.title}`,initial:{opacity:1,scale:1},animate:{opacity:(a==null?void 0:a.title)===ha.manager.title?0:1,scale:(a==null?void 0:a.title)===ha.manager.title?.8:1},transition:{duration:.3}}),R.jsx(Df,{style:{left:"15vw"},children:R.jsx(Cf,{className:"hidden2",children:"BOARDS"})})]})]})]}),R.jsx(qA,{mode:"wait",children:a&&R.jsx(D6,{onClose:l,description:a.description,link:a.link,image:{src:a.image,alt:a.title},title:a.title})})]})}/*!
+`,ha={landing:{description:"A comprehensive landing page for Green Harvest, showcasing the brand's mission and products.",image:qb,title:"LANDING",link:"https://matteblacck.github.io/greenharvest-landing/"},notes:{description:"A note-taking application that allows users to organize their thoughts and ideas efficiently.",image:Pb,title:"NOTES",link:"https://matteblacck.github.io/REACT-notesapp2/"},manager:{description:"A desktop task management tool designed to help users track and complete their daily tasks effectively. to log in use email: test@example.com and password: password123",image:Gb,title:"TASK MANAGER",link:"https://matteblacck.github.io/REACT-task-manager/"}};function U6(){const n=" PORTFOL!O ";X.useEffect(()=>{const u=document.querySelectorAll(".hiddenImage"),f=document.querySelectorAll(".hiddenImage2"),d=document.querySelectorAll(".hidden2"),h=new IntersectionObserver((y,b)=>{y.forEach(S=>{S.isIntersecting&&(S.target.classList.add("visibleImage"),b.unobserve(S.target))})},{threshold:.2}),m=new IntersectionObserver((y,b)=>{y.forEach(S=>{S.isIntersecting&&(S.target.classList.add("visibleImage2"),b.unobserve(S.target))})},{threshold:.2}),g=new IntersectionObserver((y,b)=>{y.forEach(S=>{S.isIntersecting&&(S.target.classList.add("visible2"),b.unobserve(S.target))})},{threshold:.5});return u.forEach(y=>h.observe(y)),f.forEach(y=>m.observe(y)),d.forEach(y=>g.observe(y)),()=>{u.forEach(y=>h.unobserve(y)),f.forEach(y=>m.unobserve(y)),d.forEach(y=>g.unobserve(y))}},[]);const[a,s]=X.useState(null),l=()=>{s(null)};return X.useEffect(()=>(a?(document.documentElement.style.overflowY="hidden",document.body.style.overflowY="hidden"):(document.documentElement.style.overflowY="auto",document.body.style.overflowY="auto"),()=>{document.documentElement.style.overflowY="auto",document.body.style.overflowY="auto"}),[a]),R.jsxs(R.Fragment,{children:[R.jsxs(C6,{id:"portfolio",children:[R.jsx(N6,{style:{marginTop:"50vh",transform:"rotate(-28deg)",opacity:"0.4"},children:R.jsx(j6,{reverse:!1,children:R.jsx(V6,{children:n.repeat(1e3)})})}),R.jsxs(R6,{children:[R.jsx(L6,{className:"hiddenImage",children:"MY PORTFOLIO"}),R.jsxs(Mf,{children:[R.jsx(Of,{image:qb,className:"hiddenImage",id:"landing",onClick:()=>s(ha.landing),layoutId:`portfolio-image-${ha.landing.title}`}),R.jsx(Df,{style:{left:"20vw"},children:R.jsx(Cf,{className:"hidden2",children:"LANDING"})})]}),R.jsxs(Mf,{className:"d-flex justify-content-end",children:[R.jsx(Of,{image:Pb,className:"hiddenImage2",id:"notes",onClick:()=>s(ha.notes),layoutId:`portfolio-image-${ha.notes.title}`}),R.jsx(Df,{style:{right:"30vw"},children:R.jsx(Cf,{className:"hidden2",children:"NOTES"})})]}),R.jsxs(Mf,{className:"d-flex justify-content-start",children:[R.jsx(Of,{image:Gb,className:"hiddenImage",id:"manager",onClick:()=>s(ha.manager),layoutId:`portfolio-image-${ha.manager.title}`,initial:{opacity:1,scale:1},animate:{opacity:(a==null?void 0:a.title)===ha.manager.title?0:1,scale:(a==null?void 0:a.title)===ha.manager.title?.8:1},transition:{duration:.3}}),R.jsx(Df,{style:{left:"15vw"},children:R.jsx(Cf,{className:"hidden2",children:"BOARDS"})})]})]})]}),R.jsx(qA,{mode:"wait",children:a&&R.jsx(D6,{onClose:l,description:a.description,link:a.link,image:{src:a.image,alt:a.title},title:a.title})})]})}/*!
  * Font Awesome Free 6.7.2 by @fontawesome - https://fontawesome.com
  * License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License)
  * Copyright 2024 Fonticons, Inc.
@@ -1373,7 +1373,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
   gap: 2rem;
   text-align: left;
 `,cM=it.h1`
-  font-size: ${It(48,18)};
+  font-size: ${It(48,20)};
   font-weight: 300;
   color: var(--text);
   font-style: italic;
@@ -1383,7 +1383,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
   position: relative;
   text-align: left;
 `,fM=it.p`
-  font-size: ${It(70,20)};
+  font-size: ${It(70,25)};
   color: var(--text);
   line-height: 1.6;
   font-weight: 800;
@@ -1434,7 +1434,6 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
   font-weight: 500;
   border: 2px solid transparent;
   
-  
   &:hover {
     border-color: white;
   }
@@ -1442,21 +1441,40 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
   svg {
     font-size: ${It(36,28)};
   }
+
+  @media (max-width: 420px) {
+    padding: 0.8rem 1.2rem;
+    gap: 0.5rem;
+    
+    svg {
+      font-size: 24px;
+    }
+  }
 `,pM=it.div`
   display: flex;
   align-items: center;
   gap: 1rem;
   padding: 1.2rem 1.8rem;
-  background: rgba(0, 0, 0, 0.2);
+  background: transparent;
   backdrop-filter: blur(10px);
   border-radius: 14px;
   color: var(--text);
   font-size: ${It(26,20)};
   font-weight: 500;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  border: transparent;
   box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.1), inset 0 -2px 4px rgba(0, 0, 0, 0.2);
   
   svg {
     font-size: ${It(36,28)};
+  }
+
+  @media (max-width: 420px) {
+    padding: 0.8rem 1.2rem;
+    gap: 0.5rem;
+    font-size: 16px;
+    
+    svg {
+      font-size: 24px;
+    }
   }
 `;function gM(){return R.jsx(lM,{id:"contacts",children:R.jsx(oM,{children:R.jsxs(uM,{children:[R.jsx(We.div,{initial:{opacity:0,y:20},whileInView:{opacity:1,y:0},viewport:{once:!0},transition:{duration:.5},children:R.jsx(cM,{children:"Contact Me"})}),R.jsx(We.div,{initial:{opacity:0,y:20},whileInView:{opacity:1,y:0},viewport:{once:!0},transition:{duration:.5,delay:.2},children:R.jsx(fM,{children:"I'm Always Open To New Projects And Opportunities. Let's Create Something Amazing Together!"})}),R.jsx(dM,{}),R.jsx(We.div,{initial:{opacity:0,y:20},whileInView:{opacity:1,y:0},viewport:{once:!0},transition:{duration:.5,delay:.4},children:R.jsx(hM,{children:R.jsxs(mM,{children:[R.jsx(kf,{href:"https://github.com/matteblacck",target:"_blank",rel:"noopener noreferrer",children:R.jsx(Qi,{icon:sM})}),R.jsx(kf,{href:"https://t.me/mmatteblack",target:"_blank",rel:"noopener noreferrer",children:R.jsx(Qi,{icon:rM})}),R.jsx(kf,{href:"https://vk.com/matteblackk",target:"_blank",rel:"noopener noreferrer",children:R.jsx(Qi,{icon:iM})}),R.jsxs(pM,{children:[R.jsx(Qi,{icon:aM}),"Moscow, Russia"]})]})})})]})})})}function yM(){return R.jsxs(R.Fragment,{children:[R.jsx("header",{children:R.jsx(AA,{})}),R.jsxs("main",{children:[R.jsx(fA,{}),R.jsx(xA,{}),R.jsx(UA,{}),R.jsx(U6,{}),R.jsx(gM,{})]})]})}iT.createRoot(document.getElementById("root")).render(R.jsx(X.StrictMode,{children:R.jsx(yM,{})}));window.addEventListener("scroll",function(){let n=window.scrollY,a=1.6*window.innerHeight,s=Math.min(n/a,1),l=`linear-gradient(rgba(0, 0, 0, ${s}), rgba(0, 0, 0, ${s}))`;document.body.style.background=`${l}, url(../assets/creation_of_adam.jpg)`});
