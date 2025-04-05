@@ -1389,7 +1389,6 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 1px;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
   width: 100%;
   text-align: left;
 `,dM=it.div`
