@@ -28,7 +28,7 @@ const Main = styled.div`
 `;
 
 const Title = styled.h1`
-  font-size: ${fluidText(48, 18)};
+  font-size: ${fluidText(48, 20)};
   font-weight: 300;
   color: var(--text);
   font-style: italic;
@@ -40,13 +40,12 @@ const Title = styled.h1`
 `;
 
 const WelcomeText = styled.p`
-  font-size: ${fluidText(70, 20)};
+  font-size: ${fluidText(70, 25)};
   color: var(--text);
   line-height: 1.6;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 1px;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
   width: 100%;
   text-align: left;
 `;
@@ -99,13 +98,21 @@ const SocialLink = styled.a`
   font-weight: 500;
   border: 2px solid transparent;
   
-  
   &:hover {
     border-color: white;
   }
   
   svg {
     font-size: ${fluidText(36, 28)};
+  }
+
+  @media (max-width: 420px) {
+    padding: 0.8rem 1.2rem;
+    gap: 0.5rem;
+    
+    svg {
+      font-size: 24px;
+    }
   }
 `;
 
@@ -114,17 +121,26 @@ const Location = styled.div`
   align-items: center;
   gap: 1rem;
   padding: 1.2rem 1.8rem;
-  background: rgba(0, 0, 0, 0.2);
+  background: transparent;
   backdrop-filter: blur(10px);
   border-radius: 14px;
   color: var(--text);
   font-size: ${fluidText(26, 20)};
   font-weight: 500;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.1), inset 0 -2px 4px rgba(0, 0, 0, 0.2);
+  border: transparent;
   
   svg {
     font-size: ${fluidText(36, 28)};
+  }
+
+  @media (max-width: 420px) {
+    padding: 0.8rem 1.2rem;
+    gap: 0.5rem;
+    font-size: 16px;
+    
+    svg {
+      font-size: 24px;
+    }
   }
 `;
 

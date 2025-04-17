@@ -201,13 +201,13 @@ const projectsData: Record<string, ProjectData> = {
     description: "A note-taking application that allows users to organize their thoughts and ideas efficiently.",
     image: notes2Image,
     title: "NOTES",
-    link: "",
+    link: "https://matteblacck.github.io/REACT-notesapp2/",
   },
   manager: {
-    description: "A task management tool designed to help users track and complete their daily tasks effectively.",
+    description: "A desktop task management tool designed to help users track and complete their daily tasks effectively. to log in use email: test@example.com and password: password123",
     image: taskmanagerImage,
     title: "TASK MANAGER",
-    link: "",
+    link: "https://matteblacck.github.io/REACT-task-manager/",
   },
 };
 export default function Portfolio(){
@@ -309,7 +309,7 @@ export default function Portfolio(){
               </PortfolioTextWrapper>
             </PortfolioItem>
 
-            <PortfolioItem className="d-flex justify-content-end">
+            {/* <PortfolioItem className="d-flex justify-content-end">
               <PortfolioItemImage 
                 image={notes2Image} 
                 className="hiddenImage2" 
@@ -320,9 +320,9 @@ export default function Portfolio(){
               <PortfolioTextWrapper style={{ right: "30vw" }}>
                 <PortfolioTitle className="hidden2">NOTES</PortfolioTitle>
               </PortfolioTextWrapper>
-            </PortfolioItem>
+            </PortfolioItem> */}
 
-            <PortfolioItem className="d-flex justify-content-start">
+            <PortfolioItem className="d-flex justify-content-end">
               <PortfolioItemImage 
                 image={taskmanagerImage} 
                 className="hiddenImage" 
@@ -336,7 +336,7 @@ export default function Portfolio(){
                 }}
                 transition={{ duration: 0.3 }}
               />
-              <PortfolioTextWrapper style={{ left: '15vw' }}>
+              <PortfolioTextWrapper style={{ right: "30vw" }}>
                 <PortfolioTitle className="hidden2">BOARDS</PortfolioTitle>
               </PortfolioTextWrapper>
             </PortfolioItem>
