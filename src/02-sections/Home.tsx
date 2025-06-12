@@ -192,6 +192,7 @@ export default function Home() {
           </GradientChar>
         ))}
       </TitleText>
+      
     );
   };
 

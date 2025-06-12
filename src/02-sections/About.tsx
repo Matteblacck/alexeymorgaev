@@ -56,7 +56,7 @@ const GeneralInfo = styled.div`
 
 const MoreInfo = styled.div`
   min-width: 200px;
-  max-width: 500px;
+  max-width: 600px;
   word-wrap: break-word;
   white-space: normal;
   margin-top: 30vh;
@@ -174,7 +174,7 @@ export default function About() {
     ],
     more: [
       "ME AS A DEVELOPER:",
-      "I LOVE TO CREATE USER INTERFACES THAT ARE CONVENIENT, BEAUTIFUL, AND FUNCTIONAL. I DEVELOP WITH REACT AND I’M ALWAYS LOOKING FOR NEW CHALLENGES. I HAVE PASSION TO CONSTANTLY LEARN SOMETHING NEW.",
+      "I LOVE CREATING USER INTERFACES THAT ARE CONVENIENT, BEAUTIFUL, AND FUNCTIONAL. I FOCUS ON BUILDING SCALABLE AND THOUGHTFUL SOLUTIONS, ALWAYS AIMING FOR A BALANCE BETWEEN USABILITY AND AESTHETICS. I’M PASSIONATE ABOUT CONTINUOUS LEARNING AND TACKLING NEW CHALLENGES.",
     ],
   };
   const [reverseMarquee, setReverseMarquee] = useState(false);
