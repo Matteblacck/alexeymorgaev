@@ -151,18 +151,18 @@ table {
    font: inherit;
  }
  
- html {
+html {
    /**
      Пригодится в большинстве ситуаций
      (когда, например, нужно будет "прижать" футер к низу сайта)
     */
-   height: 100%;
+  min-height: 100%;
    /**
      Убираем скачок интерфейса по горизонтали
      при появлении / исчезновении скроллбара
     */
-   scrollbar-gutter: stable;
- }
+  scrollbar-gutter: stable;
+}
  
  /**
    Плавный скролл
@@ -422,22 +422,29 @@ html, body {
   color: var(--text);
   font-family: 'Neue Montreal', sans-serif;
   font-weight: regular;
-  overscroll-behavior: none;
   position: relative;
-  background: 
+  /* background: 
     linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),  
-    url(../assets/creation_of_adam.jpg);
+    url(../assets/creation_of_adam.jpg); */
   background-size: cover;
   background-position: 15%; 
   background-repeat: no-repeat;
   background-attachment: fixed;
   transition: background 0.5s ease-in-out, opacity 0.5s ease-in-out;
   overflow-x: hidden;
-  overflow-y: auto;
   width: 100%;
   max-width: 100%;
   margin: 0;
   padding: 0;
+}
+
+html {
+  overflow-y: auto;
+  overscroll-behavior: none;
+}
+
+body {
+  overflow-y: visible;
 }
 
 @media (max-width: 964px) {

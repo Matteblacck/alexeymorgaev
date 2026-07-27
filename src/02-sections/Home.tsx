@@ -178,7 +178,7 @@ export default function Home() {
   };
 
   const renderAnimatedTitle = () => {
-    const text = "I'M A FRONTEND DEVELOPER";
+    const text = "I'M A WEB DEVELOPER";
 
     return (
       <TitleText

@@ -172,7 +172,7 @@ export default function Contacts() {
                 <SocialLink href="https://github.com/matteblacck" target="_blank" rel="noopener noreferrer">
                   <FontAwesomeIcon icon={faGithub} />
                 </SocialLink>
-                <SocialLink href="https://t.me/mmatteblack" target="_blank" rel="noopener noreferrer">
+                <SocialLink href="https://t.me/morgaev" target="_blank" rel="noopener noreferrer">
                   <FontAwesomeIcon icon={faTelegram} />
                 </SocialLink>
                 <SocialLink href="https://vk.com/matteblackk" target="_blank" rel="noopener noreferrer">

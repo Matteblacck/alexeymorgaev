@@ -11,7 +11,7 @@ const HeaderContainer = styled.div`
     opacity: 0;
     transition: opacity 0.1s ease-out; /* Плавное изменение прозрачности */
     font-weight: 600;
-    font-size:${fluidText(20, 10)};
+    font-size:${fluidText(20, 11)};
     z-index:1000;
 `;
 
