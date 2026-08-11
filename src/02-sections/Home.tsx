@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 
 // Основной контейнер
 const SectionContainer = styled.div`
-  height: 104vh;
+  height: 100vh;
   width: 100%;
   position: relative;
   background: transparent;

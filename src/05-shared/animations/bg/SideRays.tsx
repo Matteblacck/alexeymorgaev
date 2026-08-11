@@ -16,6 +16,9 @@ interface SideRaysProps {
   blend?: number;
   falloff?: number;
   opacity?: number;
+  distance?: number;
+  minAspectRatio?: number;
+  narrowScreenScale?: number;
   className?: string;
 }
 
@@ -45,6 +48,9 @@ const SideRays = ({
   blend = 0.75,
   falloff = 1.6,
   opacity = 1.0,
+  distance = 1.1,
+  minAspectRatio = 16 / 9,
+  narrowScreenScale = 0.75,
   className = ''
 }: SideRaysProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -101,6 +107,7 @@ const SideRays = ({
       const gl = renderer.gl;
       gl.canvas.style.width = '100%';
       gl.canvas.style.height = '100%';
+      gl.canvas.style.display = 'block';
 
       while (containerRef.current.firstChild) {
         containerRef.current.removeChild(containerRef.current.firstChild);
@@ -117,6 +124,7 @@ void main() {
 
 uniform float iTime;
 uniform vec2 iResolution;
+uniform vec2 iSceneResolution;
 uniform float iSpeed;
 uniform vec3 iRayColor1;
 uniform vec3 iRayColor2;
@@ -129,6 +137,7 @@ uniform float iSaturation;
 uniform float iBlend;
 uniform float iFalloff;
 uniform float iOpacity;
+uniform float iDistance;
 
 float rayStrength(vec2 raySource, vec2 rayRefDirection, vec2 coord, float seedA, float seedB, float speed) {
   vec2 sourceToCoord = coord - raySource;
@@ -137,16 +146,17 @@ float rayStrength(vec2 raySource, vec2 rayRefDirection, vec2 coord, float seedA,
     (0.45 + 0.15 * sin(cosAngle * seedA + iTime * speed)) +
     (0.3 + 0.2 * cos(-cosAngle * seedB + iTime * speed)),
     0.0, 1.0) *
-    clamp((iResolution.x - length(sourceToCoord)) / iResolution.x, 0.5, 1.0);
+    clamp((iSceneResolution.x - length(sourceToCoord)) / iSceneResolution.x, 0.5, 1.0);
 }
 
 void main() {
   vec2 fragCoord = gl_FragCoord.xy;
   if (iFlipX > 0.5) fragCoord.x = iResolution.x - fragCoord.x;
   if (iFlipY > 0.5) fragCoord.y = iResolution.y - fragCoord.y;
+  fragCoord.x += max(iSceneResolution.x - iResolution.x, 0.0);
 
-  vec2 coord = vec2(fragCoord.x, iResolution.y - fragCoord.y);
-  vec2 rayPos = vec2(iResolution.x * 1.1, -0.5 * iResolution.y);
+  vec2 coord = vec2(fragCoord.x, iSceneResolution.y - fragCoord.y);
+  vec2 rayPos = vec2(iSceneResolution.x * iDistance, -0.5 * iSceneResolution.y);
 
   float tiltRad = iTilt * 3.14159265 / 180.0;
   float cs = cos(tiltRad);
@@ -163,7 +173,7 @@ void main() {
 
   vec4 color = rays1 * (1.0 - iBlend) * 0.9 + rays2 * iBlend * 0.9;
 
-  float distanceToLight = length(fragCoord.xy - vec2(rayPos.x, iResolution.y - rayPos.y)) / iResolution.y;
+  float distanceToLight = length(fragCoord.xy - vec2(rayPos.x, iSceneResolution.y - rayPos.y)) / iSceneResolution.y;
   float brightness = iIntensity * 0.4 / pow(max(distanceToLight, 0.001), iFalloff);
   color.rgb *= brightness;
 
@@ -178,6 +188,7 @@ void main() {
       const uniforms = {
         iTime: { value: 0 },
         iResolution: { value: [1, 1] as number[] },
+        iSceneResolution: { value: [1, 1] as number[] },
         iSpeed: { value: speed },
         iRayColor1: { value: hexToRgb(rayColor1) as number[] },
         iRayColor2: { value: hexToRgb(rayColor2) as number[] },
@@ -189,7 +200,8 @@ void main() {
         iSaturation: { value: saturation },
         iBlend: { value: blend },
         iFalloff: { value: falloff },
-        iOpacity: { value: opacity }
+        iOpacity: { value: opacity },
+        iDistance: { value: distance },
       };
       uniformsRef.current = uniforms;
 
@@ -197,13 +209,34 @@ void main() {
       const program = new Program(gl, { vertex: vert, fragment: frag, uniforms });
       const mesh = new Mesh(gl, { geometry, program });
       meshRef.current = mesh;
+      let lastWidth = 0;
+      let lastHeight = 0;
+      let lastDpr = 0;
+      let lastSceneWidth = 0;
 
       const updateSize = () => {
         if (!containerRef.current || !renderer) return;
-        renderer.dpr = Math.min(window.devicePixelRatio, 2);
-        const { clientWidth: w, clientHeight: h } = containerRef.current;
+        const dpr = Math.min(window.devicePixelRatio, 2);
+        const { clientWidth, clientHeight } = containerRef.current;
+        const w = Math.max(clientWidth, 1);
+        const h = Math.max(clientHeight, 1);
+        const pixelWidth = w * dpr;
+        const pixelHeight = h * dpr;
+        const aspectRatio = pixelWidth / pixelHeight;
+        const narrowness = Math.max(0, Math.min(1, (minAspectRatio - aspectRatio) / minAspectRatio));
+        const sceneScale = 1 + narrowness * narrowScreenScale;
+        const sceneWidth = Math.max(pixelWidth, pixelHeight * minAspectRatio) * sceneScale;
+
+        if (w === lastWidth && h === lastHeight && dpr === lastDpr && sceneWidth === lastSceneWidth) return;
+
+        renderer.dpr = dpr;
         renderer.setSize(w, h);
-        uniforms.iResolution.value = [w * renderer.dpr, h * renderer.dpr];
+        uniforms.iResolution.value = [pixelWidth, pixelHeight];
+        uniforms.iSceneResolution.value = [sceneWidth, pixelHeight];
+        lastWidth = w;
+        lastHeight = h;
+        lastDpr = dpr;
+        lastSceneWidth = sceneWidth;
       };
 
       const loop = (t: number) => {
@@ -217,7 +250,10 @@ void main() {
         }
       };
 
+      const resizeObserver = new ResizeObserver(updateSize);
+
       window.addEventListener('resize', updateSize);
+      resizeObserver.observe(containerRef.current);
       updateSize();
       animationIdRef.current = requestAnimationFrame(loop);
 
@@ -227,6 +263,7 @@ void main() {
           animationIdRef.current = null;
         }
         window.removeEventListener('resize', updateSize);
+        resizeObserver.disconnect();
         if (renderer) {
           try {
             const loseCtx = renderer.gl.getExtension('WEBGL_lose_context');
@@ -249,7 +286,7 @@ void main() {
         cleanupFunctionRef.current = null;
       }
     };
-  }, [isVisible, speed, rayColor1, rayColor2, intensity, spread, origin, tilt, saturation, blend, falloff, opacity]);
+  }, [isVisible, speed, rayColor1, rayColor2, intensity, spread, origin, tilt, saturation, blend, falloff, opacity, distance, minAspectRatio, narrowScreenScale]);
 
   useEffect(() => {
     if (!uniformsRef.current) return;
@@ -267,7 +304,8 @@ void main() {
     u.iBlend.value = blend;
     u.iFalloff.value = falloff;
     u.iOpacity.value = opacity;
-  }, [speed, rayColor1, rayColor2, intensity, spread, origin, tilt, saturation, blend, falloff, opacity]);
+    u.iDistance.value = distance;
+  }, [speed, rayColor1, rayColor2, intensity, spread, origin, tilt, saturation, blend, falloff, opacity, distance]);
 
   return <div ref={containerRef} className={`side-rays-container ${className}`.trim()} />;
 };

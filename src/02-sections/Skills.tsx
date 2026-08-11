@@ -2,6 +2,7 @@ import styled, { keyframes } from "styled-components";
 import { fluidText } from "../05-shared/utils";
 import { useEffect, useState } from "react";
 import TechMarquee from "../05-shared/TechMarquee";
+import { techIcons } from "../05-shared/Icons";
 
 const SectionContainer = styled.div`
   width: 100%;
@@ -20,127 +21,169 @@ const Container = styled.div`
   @media (max-width: 768px) {
   }
 `;
-// const Arrows = styled.div`
-//   display: flex;
-//   margin-top: 2.5rem;
-//   justify-content: center;
-
-//   & > * {
-//     margin: 0 -40px; // Добавьте это свойство для уменьшения расстояния между стрелками
-//   }
-// `;
-// interface ArrowProps {
-//   style?: CSSProperties;
-//   className?: string;
-// }
-// const Arrow: React.FC<ArrowProps> = ({ style, className }) => (
-//     <svg width="150" height="50" xmlns="http://www.w3.org/2000/svg" style={style} className={className}>
-//       <line x1="10" y1="25" x2="130" y2="25" stroke="black" strokeWidth="1" />
-//       <polygon points="135,25 125,20 125,30" fill="black" />
-//     </svg>
-//   );
 const SkillsContainer = styled.div`
-    h3{
-        font-weight: 100;
-    }
-`
+  h3 {
+    font-weight: 100;
+  }
+`;
 const SkillTypeContainer = styled.div`
-`
-const SkillTypeItem = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+`;
+
+const SkillTypeItem = styled.div<{ $align?: "left" | "right" }>`
+  display: grid;
+  grid-template-columns: ${({ $align }) =>
+    $align === "left" ? "minmax(0, 1fr) 34px" : "34px minmax(0, 1fr)"};
+
+  align-items: center;
+
+  gap: 12px;
+
+  position: relative;
+
+  padding: 0.65rem 0.85rem;
+
+  border-radius: 8px;
+
+  overflow: hidden;
+
+  transition: all 0.3s ease-in-out;
+
+  svg {
+    width: 24px;
+
+    height: 24px;
+
+    justify-self: center;
+
+    flex-shrink: 0;
+
+    font-size: 24px;
+
     position: relative;
-    padding: 0.8rem 1.2rem;
-    border-radius: 12px;
-    overflow: hidden;
-    transition: all 0.3s ease-in-out;
+
+    z-index: 2;
+
+    ${({ $align }) => $align === "left" && "grid-column: 2;"}
+  }
+
+  p {
+    font-size: ${fluidText(25, 14)};
+
+    font-weight: 500;
+
+    margin: 0;
+
+    position: relative;
+
+    z-index: 2;
+
+    min-width: 0;
+
+    line-height: 1.15;
+
+    text-align: ${({ $align }) => ($align === "left" ? "right" : "left")};
+
+    ${({ $align }) => $align === "left" && "grid-column: 1; grid-row: 1;"}
+  }
+
+  &:hover {
+    color: var(--highlited-text);
+    transform: translateY(-3px);
+    border-color: var(--highlited-text);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.05);
+  }
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 8px;
+    padding: 2px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--highlited-text),
+      var(--highlited-text),
+      transparent
+    );
+    background-size: 200% 100%;
+    -webkit-mask: linear-gradient(#fff 0 0) content-box,
+      linear-gradient(#fff 0 0);
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    z-index: 0;
+  }
+
+  &:hover::before {
+    opacity: 1;
+    animation: borderGlow 2s linear infinite;
+  }
+
+  @keyframes borderGlow {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 8px;
+    padding: 1px;
+    background: radial-gradient(
+      circle at 50% 50%,
+      var(--highlited-text) 0%,
+      transparent 70%
+    );
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    z-index: 0;
+  }
+
+  &:hover::after {
+    opacity: 0.5;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0% {
+      transform: scale(1);
+      opacity: 0.5;
+    }
+    50% {
+      transform: scale(1.05);
+      opacity: 0.3;
+    }
+    100% {
+      transform: scale(1);
+      opacity: 0.5;
+    }
+  }
+
+  @media (max-width: 767px) {
+    grid-template-columns: 34px minmax(0, 1fr);
+
+    svg {
+      grid-column: 1;
+    }
 
     p {
-        font-size: ${fluidText(25, 14)};
-        font-weight: 500;
-        margin: 0;
-        position: relative;
-        z-index: 1;
+      grid-column: 2;
+      grid-row: 1;
+      text-align: left;
     }
-
-    &:hover {
-        color: var(--highlited-text);
-        transform: translateY(-3px);
-        border-color: var(--highlited-text);
-        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-        background: rgba(255, 255, 255, 0.05);
-    }
-
-    &::before {
-        content: '';
-        position: absolute;
-        inset: 0;
-        border-radius: 12px;
-        padding: 2px;
-        background: linear-gradient(90deg, 
-            transparent,
-            var(--highlited-text),
-            var(--highlited-text),
-            transparent
-        );
-        background-size: 200% 100%;
-        -webkit-mask: 
-            linear-gradient(#fff 0 0) content-box, 
-            linear-gradient(#fff 0 0);
-        mask: 
-            linear-gradient(#fff 0 0) content-box, 
-            linear-gradient(#fff 0 0);
-        -webkit-mask-composite: xor;
-        mask-composite: exclude;
-        opacity: 0;
-        transition: opacity 0.3s ease-in-out;
-    }
-
-    &:hover::before {
-        opacity: 1;
-        animation: borderGlow 2s linear infinite;
-    }
-
-    @keyframes borderGlow {
-        0% {
-            background-position: 200% 0;
-        }
-        100% {
-            background-position: -200% 0;
-        }
-    }
-
-    &::after {
-        content: '';
-        position: absolute;
-        inset: 0;
-        border-radius: 12px;
-        padding: 1px;
-        background: radial-gradient(circle at 50% 50%, 
-            var(--highlited-text) 0%,
-            transparent 70%
-        );
-        opacity: 0;
-        transition: opacity 0.3s ease-in-out;
-    }
-
-    &:hover::after {
-        opacity: 0.5;
-        animation: pulse 2s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-        0% {
-            transform: scale(1);
-            opacity: 0.5;
-        }
-        50% {
-            transform: scale(1.05);
-            opacity: 0.3;
-        }
-        100% {
-            transform: scale(1);
-            opacity: 0.5;
-        }
-    }
+  }
 `;
 const marquee = keyframes`
   0% {
@@ -170,7 +213,7 @@ const MarqueeWrapper = styled.div`
   opacity: 0.8;
   margin-left: -10%;
   margin-right: -10%;
-  
+
   // Увеличиваем зону наведения на 100px сверху и снизу
   &::before,
   &::after {
@@ -190,11 +233,13 @@ const MarqueeWrapper = styled.div`
     bottom: -100px; // Выступает вниз
   }
 `;
-const MarqueeTextWrapper = styled.div.withConfig({shouldForwardProp: (prop) => prop !== "reverse",})<{ reverse: boolean }>`
-    display: flex;
-    animation: ${({ reverse }) => (reverse ? marqueeReverse : marquee)} 
-      ${({ reverse }) => (reverse ? "20s" : "60s")} linear infinite; // Ускорение обратной анимации
-  `;
+const MarqueeTextWrapper = styled.div.withConfig({
+  shouldForwardProp: (prop) => prop !== "reverse",
+})<{ reverse: boolean }>`
+  display: flex;
+  animation: ${({ reverse }) => (reverse ? marqueeReverse : marquee)}
+    ${({ reverse }) => (reverse ? "20s" : "60s")} linear infinite; // Ускорение обратной анимации
+`;
 const MarqueeText = styled.div`
   font-size: 24px;
   font-weight: 500;
@@ -202,75 +247,105 @@ const MarqueeText = styled.div`
   padding-right: 20px; // Отступ между копиями текста
 `;
 export default function Skills() {
-    const hardskills = [
-        'HTML(HTML5), JSX',
-        'CSS (CSS3), SASS (SCSS), Bootstrap',
-        'JavaScript (ES6+, OOP), TypeScript',
-        'React(React Hooks, Router, Context API, Formik, React DND)',
-        'Redux(Redux Toolkit, Redux Persist, Redux DevTools)',
-        'Styled Components',
-        'Webpack, Vite',
-        'Rest API',
-        'Feature-Sliced Design, BEM',
-        'Git(GitHub)',
-        'Figma',
-        'English Level-B2'
-    ]
-    const softskills = [
-        "I'm responsible for the deadlines",
-        "I'm good with time management",
-        'I know ho to calmly handle conflict situations',
-        "I pay close attention to the details",
-        "I always strive to keep my code clean.",
-        "I welcome constructive criticism, I know how to admit my mistakes ",
-        "I'm m motivated to constantly improve my skills and learn new things",
+  const frontend = [
+    { icon: techIcons.html, text: "HTML (HTML5), JSX" },
+    { icon: techIcons.css, text: "CSS (CSS3), SASS (SCSS), Bootstrap" },
+    { icon: techIcons.javascript, text: "JavaScript (ES6+), TypeScript" },
+    {
+      icon: techIcons.react,
+      text: "React",
+    },
+    { icon: techIcons.nextjs, text: "Next.js" },
+    {
+      icon: techIcons.redux,
+      text: "Redux",
+    },
+    { icon: techIcons.reactQuery, text: "TanStack Query" },
+    { icon: techIcons.styledComponents, text: "Styled Components" },
+    { icon: techIcons.mui, text: "Material UI (MUI), Radix UI" },
+    { icon: techIcons.socketio, text: "Socket.IO" },
+    { icon: techIcons.webpack, text: "Webpack, Vite" },
+    { icon: techIcons.api, text: "REST API" },
+    { icon: techIcons.fsd, text: "Feature-Sliced Design, BEM" },
+    { icon: techIcons.figma, text: "Figma" },
+    { icon: techIcons.english, text: "English Level - B2" },
+  ];
 
+  const backend = [
+    { icon: techIcons.nodejs, text: "Node.js" },
+    { icon: techIcons.nestjs, text: "NestJS 11" },
+    { icon: techIcons.postgresql, text: "PostgreSQL" },
+    { icon: techIcons.prisma, text: "Prisma ORM" },
+    { icon: techIcons.jwt, text: "JWT Authentication & Authorization" },
+    { icon: techIcons.api, text: "REST API Development" },
+    { icon: techIcons.socketio, text: "Socket.IO" },
+    { icon: techIcons.s3, text: "S3-compatible Storage" },
+    { icon: techIcons.smtp, text: "SMTP, Web Push Notifications" },
+    { icon: techIcons.docker, text: "Docker" },
+    { icon: techIcons.nginx, text: "Nginx" },
+    { icon: techIcons.gitlab, text: "GitLab CI/CD" },
+    { icon: techIcons.git, text: "Git (GitHub, GitLab)" },
+    { icon: techIcons.deploy, text: "Production Deployment" },
+    { icon: techIcons.jest, text: "Jest" },
+    { icon: techIcons.cypress, text: "Cypress" },
+    { icon: techIcons.k6, text: "k6 Load Testing" },
+  ];
 
-    ]
+  useEffect(() => {
+    const elements = document.querySelectorAll(".hidden");
+    const elements1 = document.querySelectorAll(".hidden1");
+    const elements2 = document.querySelectorAll(".hidden2");
+    const observer = new IntersectionObserver(
+      (entries, observer) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.2 }
+    );
 
-    useEffect(() =>{
-        const elements = document.querySelectorAll('.hidden');
-        const elements1 = document.querySelectorAll('.hidden1');
-        const elements2 = document.querySelectorAll('.hidden2');
-        const observer = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting){
-                    entry.target.classList.add('visible')
-                    observer.unobserve(entry.target)
-                }
-            })
-        }, {threshold: 0.2})
+    const observer1 = new IntersectionObserver(
+      (entries, observer) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible1");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.4 }
+    );
 
-        const observer1 = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting){
-                    entry.target.classList.add('visible1')
-                    observer.unobserve(entry.target)
-                }
-            })
-        }, {threshold: 0.4})
+    const observer2 = new IntersectionObserver(
+      (entries, observer) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("visible2");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.4 }
+    );
 
-        const observer2 = new IntersectionObserver((entries, observer) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting){
-                    entry.target.classList.add('visible2')
-                    observer.unobserve(entry.target)
-                }
-            })
-        }, {threshold: 0.4})
-
-        elements.forEach(element => observer.observe(element))
-        elements1.forEach(element => observer1.observe(element))
-        elements2.forEach(element => observer2.observe(element))
-
-    })
-    const [reverseMarquee, setReverseMarquee] = useState(false);
-    const marqueeText2 = "HARD SK!LLS SOFT SK!LLS ";
+    elements.forEach((element) => observer.observe(element));
+    elements1.forEach((element) => observer1.observe(element));
+    elements2.forEach((element) => observer2.observe(element));
+  });
+  const [reverseMarquee, setReverseMarquee] = useState(false);
+  const marqueeText2 = "HARD SK!LLS ";
   return (
     <SectionContainer id="skills">
-      
-        <MarqueeWrapper
-        style={{ transform: "rotate(20deg)", marginTop: "70vh", zIndex: "3", opacity: '0.3'}}
+      <MarqueeWrapper
+        style={{
+          transform: "rotate(20deg)",
+          marginTop: "70vh",
+          zIndex: "3",
+          opacity: "0.3",
+        }}
         onMouseEnter={() => setReverseMarquee(true)}
         onMouseLeave={() => setReverseMarquee(false)}
       >
@@ -282,29 +357,43 @@ export default function Skills() {
         </MarqueeTextWrapper>
         <TechMarquee />
       </MarqueeWrapper>
-        <Container className="d-flex justify-content-center" >
+      <Container className="d-flex justify-content-center">
         <SkillsContainer className="d-flex justify-content-center gap-3 flex-column flex-md-row pt-5">
-                <div className="col-mg-6">
-                <h3 className="text-md-end text-start mb-2 hidden2">HARD SKILLS</h3>
-                    <SkillTypeContainer>
-                        {hardskills.map((s, index) => (
-                            <SkillTypeItem className='mb-1 hidden2 text-md-end text-start' key={index}><p>{s.toUpperCase()}</p></SkillTypeItem>
-                        ))}
-                    </SkillTypeContainer>
-                </div>
-            
-                <div className="col-md-6">
-                <h3 className="mb-2 hidden1">SOFT SKILLS</h3>
-                    <SkillTypeContainer>
-                    {softskills.map((s, index) => (
-                            <SkillTypeItem className='mb-1 hidden1 text-start' key={index}><p>{s.toUpperCase()}</p></SkillTypeItem>
-                        ))}
-                    </SkillTypeContainer>
-                </div>
-            
+          <div className="col-md-6">
+            <h3 className="text-md-end text-start mb-2 hidden2">
+              FRONTEND SKILLS
+            </h3>
+            <SkillTypeContainer>
+              {frontend.map(({ icon, text }, index) => (
+                <SkillTypeItem
+                  $align="left"
+                  className="hidden2"
+                  key={index}
+                >
+                  {icon}
+                  <p>{text.toUpperCase()}</p>
+                </SkillTypeItem>
+              ))}
+            </SkillTypeContainer>
+          </div>
+
+          <div className="col-md-6">
+            <h3 className="mb-2 hidden1">BACKEND & DEVOPS SKILLS</h3>
+            <SkillTypeContainer>
+              {backend.map(({ icon, text }, index) => (
+                <SkillTypeItem
+                  $align="right"
+                  className="hidden1"
+                  key={index}
+                >
+                  {icon}
+                  <p>{text.toUpperCase()}</p>
+                </SkillTypeItem>
+              ))}
+            </SkillTypeContainer>
+          </div>
         </SkillsContainer>
       </Container>
     </SectionContainer>
-      
   );
 }

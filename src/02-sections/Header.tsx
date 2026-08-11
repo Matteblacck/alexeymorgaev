@@ -84,6 +84,7 @@ export default function Header() {
             <div className="d-flex gap-2">
                 <NavItem href="#" onClick={(e) => {e.preventDefault(); scrollToSection('home') }}>HOME</NavItem>
                 <NavItem href="#" onClick={(e) => {e.preventDefault(); scrollToSection('about') }}>ABOUT</NavItem>
+                <NavItem href="#" onClick={(e) => {e.preventDefault(); scrollToSection('experience') }}>EXPERIENCE</NavItem>
                 <NavItem href="#" onClick={(e) => {e.preventDefault(); scrollToSection('portfolio') }}>PORTFOLIO</NavItem>
                 <NavItem href="#" onClick={(e) => {e.preventDefault(); scrollToSection('contacts') }}>CONTACTS</NavItem>
             </div>

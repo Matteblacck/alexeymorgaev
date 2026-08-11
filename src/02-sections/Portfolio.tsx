@@ -1,9 +1,7 @@
 import styled, { keyframes } from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
 import greenharvestImage from "../assets/greenharvest_landing.png";
-import notes2Image from "../assets/notes2.png";
 import taskmanagerImage from "../assets/taskmanager.png"
-import onlineStore from "../assets/onlinestore.png";
 import { fluidText } from "../05-shared/utils";
 import { useEffect, useState } from "react";
 import PortfolioItemModal from '../04-widgets/PortfolioItemModal'
@@ -198,23 +196,11 @@ const projectsData: Record<string, ProjectData> = {
     title: "LANDING",
     link: "https://matteblacck.github.io/greenharvest-landing/",
   },
-  notes: {
-    description: "A note-taking application that allows users to organize their thoughts and ideas efficiently.",
-    image: notes2Image,
-    title: "NOTES",
-    link: "https://matteblacck.github.io/REACT-notesapp2/",
-  },
   manager: {
     description: "A desktop task management tool designed to help users track and complete their daily tasks effectively. to log in use email: test@example.com and password: password123",
     image: taskmanagerImage,
     title: "TASK MANAGER",
     link: "https://matteblacck.github.io/REACT-task-manager/",
-  },
-  onlinestore: {
-    description: "A demo online clothing store featuring a shopping cart and dynamic interface. Built to showcase core e-commerce functionality using React. Some sections are intentionally left incomplete, as this is a demonstration project.",
-    image: onlineStore,
-    title: "ONLINE STORE",
-    link: "https://matteblacck.github.io/REACT-onlinestore/men/outwear/sweaters",
   },
 };
 export default function Portfolio(){
@@ -348,18 +334,6 @@ export default function Portfolio(){
               </PortfolioTextWrapper>
             </PortfolioItem>
 
-            <PortfolioItem >
-              <PortfolioItemImage 
-                image={onlineStore} 
-                className="hiddenImage" 
-                id='onlinestore' 
-                onClick={() => setSelectedItem(projectsData.onlinestore)}
-                layoutId={`portfolio-image-${projectsData.onlinestore.title}`}
-              />
-              <PortfolioTextWrapper style={{ left: "20vw" }}>
-                <PortfolioTitle className="hidden2">STORE</PortfolioTitle>
-              </PortfolioTextWrapper>
-            </PortfolioItem>
 
           </Container>
         </SectionContainer>
