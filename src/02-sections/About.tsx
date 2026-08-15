@@ -1,6 +1,7 @@
 import styled, { keyframes } from "styled-components";
 import { fluidText } from "../05-shared/utils";
 import { useEffect, useState } from "react";
+import { useLanguage } from "../05-shared/useLanguage";
 
 // Анимация для появления контейнера
 const fadeIn = keyframes`
@@ -138,6 +139,7 @@ const MarqueeText = styled.div`
   padding-right: 20px; // Отступ между копиями текста
 `;
 export default function About() {
+  const { language } = useLanguage();
     
   useEffect(() => {
     const elements = document.querySelectorAll('.hidden');
@@ -166,17 +168,31 @@ export default function About() {
   }, []);
 
   const textData = {
-    general: [
-      "SEVERAL FACTS ABOUT ME:",
-      "BORN IN: IRKUTSK",
-      "LIVE IN: MOSCOW",
-      "LOVE: CODE",
-    ],
-    more: [
-      "ME AS A DEVELOPER:",
-      "I’M A FULL-STACK ENGINEER WHO ENJOYS TAKING OWNERSHIP OF COMPLEX FEATURES FROM IDEA TO PRODUCTION. I WORK ACROSS THE ENTIRE STACK — BUILDING MODERN USER INTERFACES, DEVELOPING ROBUST BACKEND SERVICES, DESIGNING DATABASES, AND ARCHITECTING SCALABLE SOLUTIONS THAT SOLVE REAL PROBLEMS.",
-    ],
-  };
+    en: {
+      general: [
+        "SEVERAL FACTS ABOUT ME:",
+        "BORN IN: IRKUTSK",
+        "LIVE IN: MOSCOW",
+        "LOVE: CODE",
+      ],
+      more: [
+        "ME AS A DEVELOPER:",
+        "I'M A FULL-STACK ENGINEER WHO ENJOYS TAKING OWNERSHIP OF COMPLEX FEATURES FROM IDEA TO PRODUCTION. I WORK ACROSS THE ENTIRE STACK: BUILDING MODERN USER INTERFACES, DEVELOPING ROBUST BACKEND SERVICES, DESIGNING DATABASES, AND ARCHITECTING SCALABLE SOLUTIONS THAT SOLVE REAL PROBLEMS.",
+      ],
+    },
+    ru: {
+      general: [
+        "НЕСКОЛЬКО ФАКТОВ ОБО МНЕ:",
+        "РОДИЛСЯ В: ИРКУТСКЕ",
+        "ЖИВУ В: МОСКВЕ",
+        "ЛЮБЛЮ: КОД",
+      ],
+      more: [
+        "Я КАК РАЗРАБОТЧИК:",
+        "Я FULL-STACK РАЗРАБОТЧИК, КОТОРОМУ НРАВИТСЯ БРАТЬ НА СЕБЯ СЛОЖНЫЕ ФИЧИ ОТ ИДЕИ ДО ПРОДАКШЕНА. РАБОТАЮ ПО ВСЕМУ СТЕКУ: СОЗДАЮ СОВРЕМЕННЫЕ ИНТЕРФЕЙСЫ, РАЗВИВАЮ НАДЕЖНЫЕ BACKEND-СЕРВИСЫ, ПРОЕКТИРУЮ БАЗЫ ДАННЫХ И АРХИТЕКТУРУ РЕШЕНИЙ ДЛЯ РЕАЛЬНЫХ ЗАДАЧ.",
+      ],
+    },
+  }[language];
   const [reverseMarquee, setReverseMarquee] = useState(false);
   const marqueeText2 = "Warning! Frontend! ";
   return (

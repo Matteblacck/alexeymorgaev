@@ -10,6 +10,7 @@ import Skills from '../02-sections/Skills';
 import Experience from '../02-sections/Experience';
 import Portfolio from '../02-sections/Portfolio';
 import Contacts from '../02-sections/Contacts';
+import { LanguageProvider } from '../05-shared/LanguageProvider';
 
 const Background = styled.div`
   position: fixed;
@@ -48,7 +49,7 @@ const Rays = styled.div`
 function App() {
   return (
 
-    <>
+    <LanguageProvider>
 
       <Background>
         <Rays className="mobile-top-ray">
@@ -97,7 +98,7 @@ function App() {
         <Portfolio />
         <Contacts />
       </main>
-    </>
+    </LanguageProvider>
   );
 }
 

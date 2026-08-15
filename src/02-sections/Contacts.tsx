@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
 import { faTelegram, faGithub, faVk } from "@fortawesome/free-brands-svg-icons";
+import { useLanguage } from "../05-shared/useLanguage";
 
 // Основной контейнер, который будет фоном
 const SectionContainer = styled.div`
@@ -145,6 +146,8 @@ const Location = styled.div`
 `;
 
 export default function Contacts() {
+  const { language } = useLanguage();
+
   return (
     <SectionContainer id="contacts">
       <Container>
@@ -155,7 +158,9 @@ export default function Contacts() {
 
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.2 }}>
             <WelcomeText>
-              I'm Always Open To New Projects And Opportunities. Let's Create Something Amazing Together!
+              {language === "en"
+                ? "I'm Always Open To New Projects And Opportunities. Let's Create Something Amazing Together!"
+                : "Я Всегда Открыт К Новым Проектам И Возможностям. Давайте Создадим Что-То Сильное Вместе!"}
             </WelcomeText>
           </motion.div>
 
@@ -180,7 +185,7 @@ export default function Contacts() {
                 </SocialLink>
                 <Location>
                   <FontAwesomeIcon icon={faMapMarkerAlt} />
-                  Moscow, Russia
+                  {language === "en" ? "Moscow, Russia" : "Москва, Россия"}
                 </Location>
               </SocialLinks>
             </ContactsWrapper>

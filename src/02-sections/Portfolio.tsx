@@ -5,6 +5,7 @@ import taskmanagerImage from "../assets/taskmanager.png"
 import { fluidText } from "../05-shared/utils";
 import { useEffect, useState } from "react";
 import PortfolioItemModal from '../04-widgets/PortfolioItemModal'
+import { useLanguage } from "../05-shared/useLanguage";
 const SectionContainer = styled.div`
   width: 100%;
   padding-top: 30vh;
@@ -204,6 +205,7 @@ const projectsData: Record<string, ProjectData> = {
   },
 };
 export default function Portfolio(){
+    const { language } = useLanguage();
 
     const marqueeText = ' PORTFOL!O '
     useEffect(() => {
@@ -251,6 +253,23 @@ export default function Portfolio(){
     }, [])
     
     
+    const localizedProjectsData: Record<string, ProjectData> = {
+      landing: {
+        ...projectsData.landing,
+        description:
+          language === "en"
+            ? projectsData.landing.description
+            : "Полноценный landing page для Green Harvest, который показывает миссию бренда и продуктовую линейку.",
+      },
+      manager: {
+        ...projectsData.manager,
+        description:
+          language === "en"
+            ? projectsData.manager.description
+            : "Desktop-инструмент для управления задачами, который помогает отслеживать и закрывать ежедневные задачи. Для входа используйте email: test@example.com и пароль: password123",
+      },
+    };
+
     const [selectedItem, setSelectedItem] = useState<ProjectData | null>(null);
     
     const handleCloseModal = () => {
@@ -294,7 +313,7 @@ export default function Portfolio(){
                 image={greenharvestImage} 
                 className="hiddenImage" 
                 id='landing' 
-                onClick={() => setSelectedItem(projectsData.landing)}
+                onClick={() => setSelectedItem(localizedProjectsData.landing)}
                 layoutId={`portfolio-image-${projectsData.landing.title}`}
               />
               <PortfolioTextWrapper style={{ left: "20vw" }}>
@@ -320,7 +339,7 @@ export default function Portfolio(){
                 image={taskmanagerImage} 
                 className="hiddenImage" 
                 id='manager' 
-                onClick={() => setSelectedItem(projectsData.manager)}
+                onClick={() => setSelectedItem(localizedProjectsData.manager)}
                 layoutId={`portfolio-image-${projectsData.manager.title}`}
                 initial={{ opacity: 1, scale: 1 }}
                 animate={{ 

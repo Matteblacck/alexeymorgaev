@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { fluidText } from '../05-shared/utils';
 import { useEffect } from 'react';
+import { useLanguage } from '../05-shared/useLanguage';
 
 const ModalOverlay = styled(motion.div)`
   position: fixed;
@@ -263,6 +264,8 @@ interface ModalProps {
 }
 
 const Modal: React.FC<ModalProps> = ({ onClose, description, link, image, title }) => {
+  const { language } = useLanguage();
+
   useEffect(() => {
     document.body.style.overflowY = 'hidden';
     return () => {
@@ -354,11 +357,11 @@ const Modal: React.FC<ModalProps> = ({ onClose, description, link, image, title 
                   padding: '6px 0'
                 }}
               >
-                Сlose
+                {language === 'en' ? 'Close' : 'Закрыть'}
               </motion.button>
             </div>
             <StyledLink href={link} target="_blank" rel="noopener noreferrer">
-              Visit site
+              {language === 'en' ? 'Visit site' : 'Открыть сайт'}
             </StyledLink>
           </DownBar>
         </ContentWrapper>

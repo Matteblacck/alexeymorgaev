@@ -3,6 +3,7 @@ import styled, { keyframes } from "styled-components";
 import { AnimatePresence, motion } from "framer-motion";
 import { TbArrowUpRight, TbX } from "react-icons/tb";
 import { fluidText } from "../05-shared/utils";
+import { useLanguage } from "../05-shared/useLanguage";
 
 type ExperienceProject = {
   title: string;
@@ -30,7 +31,7 @@ type ExperienceItem = {
   }[];
 };
 
-const experiences: ExperienceItem[] = [
+const experiencesRu: ExperienceItem[] = [
   {
     company: "VIDNA",
     period: "Февраль 2026 — Сентябрь 2026",
@@ -74,20 +75,13 @@ const experiences: ExperienceItem[] = [
           {
             title: "DevOps / Infrastructure",
             text: [
-              "Подготовил инфраструктуру на Docker так, чтобы проект можно было одинаково предсказуемо запускать в разработке, тестировании и production.",
-              "Настроил сборку frontend и backend в Docker images, Nginx reverse proxy, окружения, переменные, подключение PostgreSQL, файлового хранилища, SMTP и web push.",
-              "Автоматизировал GitLab CI pipeline: проверки, сборку образов, публикацию релизов и базовые операции обслуживания. Это сократило ручные действия при выпуске изменений и снизило риск ошибок при деплое.",
-              "На"
+              "Подготовил 3 конфига Docker, чтобы проект можно было одинаково предсказуемо запускать в среде разработки, тестирования и в проде.",
+              "Подготовил проект к деплою: настроил nginx конфиги, организовал ci/cd, настроил бэкапы базы данных, написал документацию по работе с сервером.",
+  
+             
             ],
           },
-          {
-            title: "Testing / Quality",
-            text: [
-              "Покрывал критичные части приложения unit и e2e-тестами на Jest и Cypress: авторизацию, API, пользовательские сценарии, frontend-потоки и взаимодействие с backend.",
-              "Готовил нагрузочные сценарии на k6 для API, realtime-коммуникации и загрузки файлов, чтобы заранее проверять поведение системы под ростом активности.",
-              "Следил за TypeScript-типизацией, форматированием и единым стилем кода, чтобы проект оставался поддерживаемым при расширении функциональности.",
-            ],
-          },
+  
         ],
       },
     ],
@@ -95,31 +89,27 @@ const experiences: ExperienceItem[] = [
       {
         label: "Frontend",
         items: [
-          "Next.js 15",
-          "React 19",
+          "Next.js",
+          "React",
           "TypeScript",
           "TanStack Query",
           "Redux Toolkit",
           "NextAuth",
           "Axios",
           "React Hook Form",
-          "Zod",
-          "@dnd-kit",
           "MUI",
-          "Radix UI",
           "PWA",
         ],
       },
       {
         label: "Backend",
         items: [
-          "NestJS 11",
-          "PostgreSQL 15",
+          "NestJS",
+          "TypeScript",
+          "PostgreSQL",
           "Prisma ORM",
-          "Prisma Migrations",
           "Socket.IO",
           "JWT",
-          "Passport",
           "Swagger",
           "S3",
           "Multer",
@@ -132,7 +122,6 @@ const experiences: ExperienceItem[] = [
         label: "DevOps",
         items: [
           "Docker",
-          "Docker Compose",
           "Nginx",
           "GitLab CI",
           "Jest",
@@ -235,7 +224,7 @@ const experiences: ExperienceItem[] = [
           {
             title: "Мой опыт",
             text:
-              "Запустил клиентскую часть с нуля: главная и проектные страницы, форма подачи заявок с сохранением черновиков. Сделал процесс подачи заявки максимально удобным: пользователи могут сохранять черновики, возвращаться к ним позже и редактировать без потери данных, что повышает конверсию и снижает количество ошибок при заполнении формы. Подключил онлайн-платежи через CloudPayments, обеспечив безопасные и быстрые пожертвования. Реализовал адаптивную и кроссбраузерную верстку, благодаря чему платформа стала доступна на любых устройствах.",
+              "Разрабатывал клиентскую часть с нуля: главная и проектные страницы, форма подачи заявок с сохранением черновиков. Сделал процесс подачи заявки максимально удобным: пользователи могут сохранять черновики, возвращаться к ним позже и редактировать без потери данных, что повышает конверсию и снижает количество ошибок при заполнении формы. Подключил онлайн-платежи через CloudPayments, обеспечив безопасные и быстрые пожертвования. Реализовал адаптивную и кроссбраузерную верстку, благодаря чему платформа стала доступна на любых устройствах.",
           },
         ],
         stack: ["React", "TypeScript", "Redux Toolkit", "REST API"],
@@ -287,6 +276,179 @@ const experiences: ExperienceItem[] = [
         items: ["React", "TypeScript", "Redux Toolkit"],
       },
     ],
+  },
+];
+
+const experiencesEn: ExperienceItem[] = [
+  {
+    company: "VIDNA",
+    period: "February 2026 - September 2026",
+    duration: "8 months",
+    role: "Fullstack Developer",
+    domain: "SaaS/PWA, construction management CRM",
+    summary:
+      "A construction management CRM: one workspace for projects, tasks, teams, files, communication, and finances.",
+    highlights: [
+      "Helped turn fragmented site management into one digital workflow from project launch to handover.",
+      "Made stages, tasks, deadlines, owners, and statuses transparent for teams and managers.",
+      "Built project communication so discussions, files, and decisions would not get lost in external messengers.",
+      "Developed client access so customers could track progress without seeing the team's internal workspace.",
+      "Set up environments, CI/CD, and testing so the product could be developed and released steadily.",
+    ],
+    projects: [
+      {
+        title: "VIDNA - CRM for construction projects",
+        brief:
+          "VIDNA is a SaaS/PWA platform for construction and renovation companies. The app helps manage a site from start to handover: create projects, split them into stages, assign tasks, control deadlines, store photos and documents, communicate in project chats, track finances, and give clients limited guest access.",
+        experience: [
+          {
+            title: "Frontend",
+            text: [
+              "Built the Next.js and TypeScript interface that construction teams use every day: project management, Kanban tasks and work progress, project media, team chats, a shared chat, and finance sections.",
+              "Used TanStack Query and Redux Toolkit for server data so the interface stayed fast and predictable with many project entities. Made project workflows clear for construction participants and made statuses quick to review and update.",
+              "Implemented guest access so clients could see site progress and materials without access to internal data. Also worked on support chat and a separate workspace for support employees.",
+              "Put special focus on the mobile version: added the PWA wrapper and reworked navigation and UI for more convenient on-site mobile use.",
+            ],
+          },
+          {
+            title: "Backend",
+            text: [
+              "Designed the NestJS backend with PostgreSQL around real construction-company entities: projects, roles and permissions, finance tracking, worker and client interaction.",
+              "Designed the PostgreSQL schema: described relations between users, organizations, projects, members, stages, tasks, files, chats, and financial operations; added migrations, indexes for frequent queries, soft-delete, and data archiving.",
+              "Configured input validation with class-validator and ValidationPipe, a unified error format through exception filters, rate limiting for auth flows, request and error logging, and Swagger/OpenAPI documentation for the REST API.",
+              "Implemented a flexible permissions system so employees, managers, clients, and administrators saw only the data and actions they needed. Developed the realtime layer with Socket.IO for chats, project events, and notifications so the team could react faster to site changes.",
+              "Built photo, document, and attachment uploads through S3-compatible object storage. Worked through the SaaS model: subscriptions, trial/demo access, feature limits for inactive subscriptions, guest links for clients, and a system admin panel for managing the platform.",
+            ],
+          },
+          {
+            title: "DevOps / Infrastructure",
+            text: [
+              "Prepared 3 Docker configs so the project could run predictably in development, testing, and production environments.",
+              "Prepared the project for deployment: configured nginx, organized CI/CD, set up database backups, and wrote server-operation documentation.",
+            ],
+          },
+        ],
+      },
+    ],
+    stack: experiencesRu[0].stack,
+  },
+  {
+    company: "CN-IRK Logistics",
+    location: "Moscow",
+    period: "June 2025 - January 2026",
+    duration: "7 months",
+    role: "Fullstack Developer",
+    domain: "Transportation, logistics, warehousing.",
+    summary:
+      "A logistics service for goods from China: user account, admin panel, orders, and communication with operators.",
+    highlights: [
+      "Designed the NestJS backend with modular, clean architecture.",
+      "Built the Next.js frontend using FSD.",
+      "Wrapped the app as a PWA for better mobile usage.",
+      "Implemented chats between users and platform operators.",
+      "Introduced Unit and E2E testing for key business scenarios.",
+      "Organized Docker environments and CI/CD on GitLab.",
+    ],
+    projects: [
+      {
+        title: "Logistics service for goods from China",
+        brief:
+          "A project for logistics from China: order creation and tracking, customer account, communication with platform operators, admin panel, and internal team reporting.",
+        experience: [
+          {
+            title: "Frontend experience",
+            text: [
+              "Built the client side with Next.js and FSD: landing page, personal account, admin panel, and user flows for working with orders.",
+              "Wrapped the app as a PWA so the service was easier to use from mobile devices. Significantly improved performance and SEO of the main page with Server-Side Rendering.",
+              "Implemented chats between users and operators, plus a restricted admin panel based on React Query: order management with filtering and shared system settings.",
+            ],
+          },
+          {
+            title: "Backend experience",
+            text: [
+              "Designed the NestJS backend with modular and clean architecture, planned the API structure, and worked with data through PostgreSQL and Prisma.",
+              "Added Unit and E2E testing to make key business flows reliable. Configured VK OAuth authorization with secure token handling.",
+              "Integrated Notion for automatic data and reporting synchronization. Organized Docker environments for dev, test, and prod, and configured CI/CD on GitLab.",
+            ],
+          },
+        ],
+      },
+    ],
+    stack: experiencesRu[1].stack,
+  },
+  {
+    company: "Sibdev",
+    period: "February 2024 - June 2025",
+    duration: "1 year 5 months",
+    role: "Frontend Developer",
+    summary:
+      "Client-side product work: a gaming marketplace and a crowdfunding platform for schools.",
+    highlights: [
+      "Updated the interface design and migrated the project to FSD architecture.",
+      "Implemented a catalog with filtering and sorting.",
+      "Configured authorization and reduced user login time.",
+      "Added WebSocket chats for instant communication.",
+      "Launched the client side of a crowdfunding platform from scratch.",
+    ],
+    projects: [
+      {
+        title: "Out Game",
+        brief:
+          "Out Game is a marketplace for in-game items where users find products, communicate inside the platform, and close deals faster.",
+        experience: [
+          {
+            title: "My experience",
+            text:
+              "Updated the interface design and migrated the project to FSD architecture, making support and development simpler. Implemented a catalog with filtering and sorting, so users could find the right items in seconds. Configured authorization and reduced login time. Added WebSocket chats, helping deals close faster through instant communication. Optimized loading and rendering of large lists, making pages noticeably faster even with large amounts of data.",
+          },
+        ],
+        stack: experiencesRu[2].projects[0].stack,
+      },
+      {
+        title: "I Love School",
+        brief:
+          "I Love School is a crowdfunding platform for schools: project pages, application collection, and online donations.",
+        experience: [
+          {
+            title: "My experience",
+            text:
+              "Built the client side from scratch: home page, project pages, and an application form with draft saving. Made the application flow more convenient: users can save drafts, return later, and edit without losing data, improving conversion and reducing form errors. Integrated online payments through CloudPayments for secure and fast donations. Implemented responsive and cross-browser layout so the platform works across devices.",
+          },
+        ],
+        stack: experiencesRu[2].projects[1].stack,
+      },
+    ],
+    stack: experiencesRu[2].stack,
+  },
+  {
+    company: "LitRes",
+    location: "Moscow",
+    period: "January 2023 - January 2024",
+    duration: "1 year 1 month",
+    role: "Frontend Developer",
+    domain: "Information technology, systems integration, internet",
+    summary:
+      "The LitRes: Samizdat author dashboard and interfaces for platform authors.",
+    highlights: [
+      "Built an analytics dashboard for authors.",
+      "Created a notification center for sales, royalty accruals, and platform news.",
+      "Optimized interface performance when working with large datasets.",
+    ],
+    projects: [
+      {
+        title: "LitRes: Samizdat",
+        brief:
+          "LitRes: Samizdat is a self-publishing platform where authors manage books, track sales, monitor reader demand, and follow important account events.",
+        experience: [
+          {
+            title: "My experience",
+            text:
+              "While developing the author dashboard, my main focus was improving usability for authors. The analytics dashboard gave authors a way to track sales dynamics, reader demand, and book revenue. This helped them understand reader interest. I also created a notification center, reducing author response time to important events: sales, royalty accruals, and platform news. Optimized interface performance, lowering response time and improving user satisfaction when working with large datasets.",
+          },
+        ],
+      },
+    ],
+    stack: experiencesRu[3].stack,
   },
 ];
 
@@ -372,15 +534,6 @@ const Title = styled.h2`
   line-height: 0.92;
   text-transform: uppercase;
   max-width: 720px;
-`;
-
-const Lead = styled.p`
-  color: var(--text);
-  font-size: ${fluidText(24, 16)};
-  font-weight: 500;
-  line-height: 1.2;
-  opacity: 0.72;
-  text-transform: uppercase;
 `;
 
 const ExperienceList = styled.div`
@@ -746,6 +899,8 @@ const contentVariants = {
 };
 
 export default function Experience() {
+  const { language } = useLanguage();
+  const experiences = language === "en" ? experiencesEn : experiencesRu;
   const [reverseMarquee, setReverseMarquee] = useState(false);
   const [selectedExperience, setSelectedExperience] =
     useState<ExperienceItem | null>(null);
@@ -771,6 +926,10 @@ export default function Experience() {
       elements.forEach((element) => observer.unobserve(element));
     };
   }, []);
+
+  useEffect(() => {
+    setSelectedExperience(null);
+  }, [language]);
 
   useEffect(() => {
     if (selectedExperience) {
@@ -809,11 +968,7 @@ export default function Experience() {
 
         <Container>
           <HeaderRow>
-            <Title className="experience-hidden hidden2">Опыт работы</Title>
-            <Lead className="experience-hidden hidden2">
-              Проекты, продуктовые задачи и вклад в frontend, backend и
-              инфраструктуру.
-            </Lead>
+            <Title className="experience-hidden hidden2">EXPERIENCE</Title>
           </HeaderRow>
 
           <ExperienceList>
@@ -848,7 +1003,7 @@ export default function Experience() {
                       ))}
                   </Tags>
                   <More>
-                    Подробнее
+                    {language === "en" ? "More details" : "Подробнее"}
                     <TbArrowUpRight />
                   </More>
                 </CardMain>
@@ -880,7 +1035,7 @@ export default function Experience() {
                 <CloseButton
                   type="button"
                   onClick={() => setSelectedExperience(null)}
-                  aria-label="Закрыть опыт"
+                  aria-label={language === "en" ? "Close experience" : "Закрыть опыт"}
                 >
                   <TbX />
                 </CloseButton>
@@ -889,22 +1044,22 @@ export default function Experience() {
               <ModalGrid>
                 <MetaPanel>
                   <MetaItem>
-                    <span>Период</span>
+                    <span>{language === "en" ? "Period" : "Период"}</span>
                     <p>{selectedExperience.period}</p>
                   </MetaItem>
                   <MetaItem>
-                    <span>Длительность</span>
+                    <span>{language === "en" ? "Duration" : "Длительность"}</span>
                     <p>{selectedExperience.duration}</p>
                   </MetaItem>
                   {selectedExperience.location && (
                     <MetaItem>
-                      <span>Локация</span>
+                      <span>{language === "en" ? "Location" : "Локация"}</span>
                       <p>{selectedExperience.location}</p>
                     </MetaItem>
                   )}
                   {selectedExperience.domain && (
                     <MetaItem>
-                      <span>Сфера</span>
+                      <span>{language === "en" ? "Domain" : "Сфера"}</span>
                       <p>{selectedExperience.domain}</p>
                     </MetaItem>
                   )}
@@ -946,7 +1101,7 @@ export default function Experience() {
                   ))}
 
                   <Block>
-                    <BlockTitle>Стек</BlockTitle>
+                    <BlockTitle>Stack</BlockTitle>
                     <StackGroup>
                       {selectedExperience.stack.map((group) => (
                         <div key={group.label}>

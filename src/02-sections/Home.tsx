@@ -1,7 +1,7 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import styled, { keyframes } from "styled-components";
 import { fluidText } from "../05-shared/utils";
 import { motion } from "framer-motion";
+import { useLanguage } from "../05-shared/useLanguage";
 
 // Основной контейнер
 const SectionContainer = styled.div`
@@ -93,12 +93,14 @@ const AnimatedText = styled(motion.div)`
   display: inline-block;
 `;
 
-const NameText = styled(AnimatedText)`
-  font-size: ${fluidText(60, 22)};
+const NameText = styled(AnimatedText)<{ $compact?: boolean }>`
+  font-size: ${({ $compact }) => ($compact ? fluidText(46, 20) : fluidText(60, 22))};
+  max-width: calc(100vw - 40px);
 `;
 
 const TitleText = styled(AnimatedText)`
   font-size: ${fluidText(24, 18)};
+  max-width: calc(100vw - 40px);
 `;
 
 const GradientChar = styled(motion.span)`
@@ -152,6 +154,7 @@ const ListItem = styled.li`
 `;
 
 export default function Home() {
+  const { language } = useLanguage();
   const scrollToSection = (id: string) => {
     const section = document.getElementById(id);
     if (section) {
@@ -160,10 +163,13 @@ export default function Home() {
   };
 
   const renderAnimatedName = () => {
-    const text = "HELLO, MY NAME IS ALEXEY";
+    const text =
+      language === "en" ? "HELLO, MY NAME IS ALEXEY" : "ПРИВЕТ, Я АЛЕКСЕЙ";
 
     return (
       <NameText
+        $compact={language === "ru"}
+        key={`name-${language}`}
         variants={nameContainerVariants}
         initial="hidden"
         animate="visible"
@@ -178,10 +184,12 @@ export default function Home() {
   };
 
   const renderAnimatedTitle = () => {
-    const text = "I'M A WEB DEVELOPER";
+    const text =
+      language === "en" ? "I'M A WEB DEVELOPER" : "Я ВЕБ-РАЗРАБОТЧИК";
 
     return (
       <TitleText
+        key={`title-${language}`}
         variants={titleContainerVariants}
         initial="hidden"
         animate="visible"
