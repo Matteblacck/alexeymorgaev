@@ -1,8 +1,9 @@
 import styled, { keyframes } from "styled-components";
 import { fluidText } from "../05-shared/utils";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import TechMarquee from "../05-shared/TechMarquee";
 import { techIcons } from "../05-shared/Icons";
+import { revealOnScroll } from "../05-shared/revealOnScroll";
 
 const SectionContainer = styled.div`
   width: 100%;
@@ -247,6 +248,7 @@ const MarqueeText = styled.div`
   padding-right: 20px; // Отступ между копиями текста
 `;
 export default function Skills() {
+  const sectionRef = useRef<HTMLDivElement>(null);
   const frontend = [
     { icon: techIcons.html, text: "HTML (HTML5), JSX" },
     { icon: techIcons.css, text: "CSS (CSS3), SASS (SCSS), Bootstrap" },
@@ -292,53 +294,16 @@ export default function Skills() {
   ];
 
   useEffect(() => {
-    const elements = document.querySelectorAll(".hidden");
-    const elements1 = document.querySelectorAll(".hidden1");
-    const elements2 = document.querySelectorAll(".hidden2");
-    const observer = new IntersectionObserver(
-      (entries, observer) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("visible");
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.2 }
-    );
-
-    const observer1 = new IntersectionObserver(
-      (entries, observer) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("visible1");
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.4 }
-    );
-
-    const observer2 = new IntersectionObserver(
-      (entries, observer) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("visible2");
-            observer.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.4 }
-    );
-
-    elements.forEach((element) => observer.observe(element));
-    elements1.forEach((element) => observer1.observe(element));
-    elements2.forEach((element) => observer2.observe(element));
-  });
+    return revealOnScroll(sectionRef.current, [
+      { selector: ".hidden", visibleClass: "visible" },
+      { selector: ".hidden1", visibleClass: "visible1" },
+      { selector: ".hidden2", visibleClass: "visible2" },
+    ]);
+  }, []);
   const [reverseMarquee, setReverseMarquee] = useState(false);
   const marqueeText2 = "HARD SK!LLS ";
   return (
-    <SectionContainer id="skills">
+    <SectionContainer ref={sectionRef} id="skills">
       <MarqueeWrapper
         style={{
           transform: "rotate(20deg)",

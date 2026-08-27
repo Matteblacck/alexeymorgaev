@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { AnimatePresence, motion } from "framer-motion";
 import { TbArrowUpRight, TbX } from "react-icons/tb";
 import { fluidText } from "../05-shared/utils";
 import { useLanguage } from "../05-shared/useLanguage";
+import { revealOnScroll } from "../05-shared/revealOnScroll";
 
 type ExperienceProject = {
   title: string;
@@ -33,7 +34,7 @@ type ExperienceItem = {
 
 const experiencesRu: ExperienceItem[] = [
   {
-    company: "VIDNA",
+    company: "Строительная CRM",
     period: "Февраль 2026 — Сентябрь 2026",
     duration: "8 месяцев",
     role: "Fullstack-разработчик",
@@ -49,27 +50,28 @@ const experiencesRu: ExperienceItem[] = [
     ],
     projects: [
       {
-        title: "VIDNA — CRM для строительных проектов",
+        title: "CRM платформа для управления строительством",
         brief:
-          "VIDNA — SaaS/PWA-платформа для строительных и ремонтных компаний. Приложение помогает вести объект от старта до сдачи: создавать проекты, делить их на этапы, ставить задачи сотрудникам, контролировать сроки, хранить фото и документы, общаться в проектном чате, отслеживать финансы и давать клиентам ограниченный гостевой доступ.",
+          "",
         experience: [
           {
             title: "Frontend",
             text: [
-              "Разрабатывал интерфейс на Next.js и TypeScript, через который строительная команда ведёт объект каждый день: управление проектом, Kanban с задачами и ходом работ, медиа проекта, командные чаты, общий чат и финансовые разделы.",
-              "Для работы с серверными данными использовал TanStack Query и Redux Toolkit, чтобы интерфейс быстро обновлялся и оставался предсказуемым при большом количестве проектных сущностей. Сделал сценарии управления проектом понятными для всех участников строительства, а статусы задач и этапов быстрыми для просмотра и обновления.",
-              "Реализовал гостевой доступ, чтобы клиент мог видеть прогресс и материалы по объекту без доступа к внутренним данным. Отдельно проработал чат с техподдержкой и отдельное пространство для сотрудников поддержки.",
-              "Особый акцент был сделан на мобильной версии приложения: реализовал PWA-обёртку, переработал навигацию и дизайн для более удобной работы с мобильных устройств прямо на объекте.",
+              "Разрабатывал интерфейс на Next.js и TypeScript, через который строительная команда ведёт работу каждый день: кабинет управление проектами, канбан-доска с ходом работ, интерфейс для работы с медиафайлами, чаты. Реализовал техподдержку на сайте и изолированное пространтсво для операторов техподдержки.",
+              "Реализовал гостевой доступ, для возможности выдавать временный ограниченый доступ к проекту третьим сторонам, в зависимости от нужного им доступа.",
+              "Особый акцент был сделан на мобильной версии приложения: реализовал PWA-обёртку, значительно переработал навигацию и дизайн для более удобной работы с мобильных уcтройств. Реализовал удобную навигацию в нижней части экрана и перенес функциональные кнопки в нижнюю область экрана, отдельные страницы собрал с нуля.",
+              "Для работы с серверными данными использовал TanStack Query, чтобы интерфейс быстро обновлялся и оставался предсказуемым при большом количестве сущностей. Сделал сценарии управления проектом понятными для всех участников строительства, а статусы задач и этапов быстрыми для просмотра и обновления.",
+              
             ],
           },
           {
             title: "Backend",
             text: [
-              "Проектировал backend на NestJS с PostgreSQL вокруг реальных бизнес-сущностей строительной компании: проекты, роли и права доступа, учёт финансов, взаимодействие работников и клиентов.",
+              "Проектировал сервисы на NestJS с PostgreSQL вокруг реальных бизнес-сущностей строительной компании: проекты, роли и права доступа, учёт финансов, взаимодействие работников и клиентов.",
               "Проектировал схему PostgreSQL: описывал связи между пользователями, организациями, проектами, участниками, этапами, задачами, файлами, чатами и финансовыми операциями; добавлял миграции, индексы для частых запросов, soft-delete и архивирование данных.",
-              "Настраивал валидацию входящих данных через class-validator и ValidationPipe, единый формат ошибок через exception filters, rate limiting для auth-сценариев, логирование запросов и ошибок, Swagger/OpenAPI-документацию для REST API.",
+              "Настраивал валидацию входящих данных, единый формат ошибок через exception filters, rate limiting для auth-сценариев, логирование запросов и ошибок, Swagger/OpenAPI-документацию.",
               "Реализовал гибкую систему прав, чтобы сотрудники, руководители, клиенты и администраторы видели только нужные им данные и действия. Развивал realtime-слой на Socket.IO для чатов, событий проекта и уведомлений, чтобы команда быстрее реагировала на изменения по объекту.",
-              "Сделал загрузку и хранение фото, документов и вложений через S3-объектное хранилище. Проработал SaaS-модель продукта: подписки, trial/demo-доступ, ограничения функциональности при неактивной подписке, гостевые ссылки для клиентов и системную админку для управления платформой.",
+              "Настроил загрузку и хранение фото, документов и вложений через S3-объектное хранилище. Проработал SaaS-модель продукта: подписки, trial/demo-доступ, ограничения функциональности при неактивной подписке, гостевые ссылки для клиентов и системную админку для управления платформой.",
             ],
           },
           {
@@ -281,7 +283,7 @@ const experiencesRu: ExperienceItem[] = [
 
 const experiencesEn: ExperienceItem[] = [
   {
-    company: "VIDNA",
+    company: "CRM platform",
     period: "February 2026 - September 2026",
     duration: "8 months",
     role: "Fullstack Developer",
@@ -297,9 +299,9 @@ const experiencesEn: ExperienceItem[] = [
     ],
     projects: [
       {
-        title: "VIDNA - CRM for construction projects",
+        title: "Construction management CRM platform",
         brief:
-          "VIDNA is a SaaS/PWA platform for construction and renovation companies. The app helps manage a site from start to handover: create projects, split them into stages, assign tasks, control deadlines, store photos and documents, communicate in project chats, track finances, and give clients limited guest access.",
+          "A SaaS/PWA CRM platform for construction and renovation companies. The app helps manage a site from start to handover: create projects, split them into stages, assign tasks, control deadlines, store photos and documents, communicate in project chats, track finances, and give clients limited guest access.",
         experience: [
           {
             title: "Frontend",
@@ -901,31 +903,17 @@ const contentVariants = {
 export default function Experience() {
   const { language } = useLanguage();
   const experiences = language === "en" ? experiencesEn : experiencesRu;
+  const sectionRef = useRef<HTMLElement>(null);
   const [reverseMarquee, setReverseMarquee] = useState(false);
   const [selectedExperience, setSelectedExperience] =
     useState<ExperienceItem | null>(null);
   const marqueeText = "WORK EXPERIENCE ";
 
   useEffect(() => {
-    const elements = document.querySelectorAll(".experience-hidden");
-    const observer = new IntersectionObserver(
-      (entries, observerInstance) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("visible2");
-            observerInstance.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.25 }
-    );
-
-    elements.forEach((element) => observer.observe(element));
-
-    return () => {
-      elements.forEach((element) => observer.unobserve(element));
-    };
-  }, []);
+    return revealOnScroll(sectionRef.current, [
+      { selector: ".experience-hidden", visibleClass: "visible2" },
+    ]);
+  }, [language]);
 
   useEffect(() => {
     setSelectedExperience(null);
@@ -948,7 +936,7 @@ export default function Experience() {
 
   return (
     <>
-      <SectionContainer id="experience">
+      <SectionContainer ref={sectionRef} id="experience">
         <MarqueeWrapper
           style={{
             transform: "rotate(-16deg)",

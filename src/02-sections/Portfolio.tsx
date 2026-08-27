@@ -3,9 +3,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import greenharvestImage from "../assets/greenharvest_landing.png";
 import taskmanagerImage from "../assets/taskmanager.png"
 import { fluidText } from "../05-shared/utils";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import PortfolioItemModal from '../04-widgets/PortfolioItemModal'
 import { useLanguage } from "../05-shared/useLanguage";
+import { revealOnScroll } from "../05-shared/revealOnScroll";
 const SectionContainer = styled.div`
   width: 100%;
   padding-top: 30vh;
@@ -206,50 +207,15 @@ const projectsData: Record<string, ProjectData> = {
 };
 export default function Portfolio(){
     const { language } = useLanguage();
+    const sectionRef = useRef<HTMLDivElement>(null);
 
     const marqueeText = ' PORTFOL!O '
     useEffect(() => {
-      const elements = document.querySelectorAll(".hiddenImage")
-      const elements2 = document.querySelectorAll(".hiddenImage2")
-      const elements3 = document.querySelectorAll(".hidden2");
-      
-      const observer = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-              if (entry.isIntersecting){
-                entry.target.classList.add('visibleImage')
-                observer.unobserve(entry.target)
-              }
-            })
-      }, {threshold: 0.2})
-      
-      const observer2 = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-              if (entry.isIntersecting){
-                entry.target.classList.add('visibleImage2')
-                observer.unobserve(entry.target)
-              }
-            })
-      }, {threshold: 0.2})
-      
-      const observer3 = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting){
-                entry.target.classList.add('visible2')
-                observer.unobserve(entry.target)
-            }
-        })
-      }, {threshold: 0.5})
-      
-      elements.forEach(element => observer.observe(element))
-      elements2.forEach(element => observer2.observe(element))
-      elements3.forEach(element => observer3.observe(element));
-      
-      // Очистка обработчиков при размонтировании компонента
-      return () => {
-        elements.forEach(element => observer.unobserve(element));
-        elements2.forEach(element => observer2.unobserve(element));
-        elements3.forEach(element => observer3.unobserve(element));
-      };
+      return revealOnScroll(sectionRef.current, [
+        { selector: ".hiddenImage", visibleClass: "visibleImage" },
+        { selector: ".hiddenImage2", visibleClass: "visibleImage2" },
+        { selector: ".hidden2", visibleClass: "visible2" },
+      ]);
     }, [])
     
     
@@ -294,7 +260,7 @@ export default function Portfolio(){
     
     return (
       <>
-        <SectionContainer id='portfolio'>
+        <SectionContainer ref={sectionRef} id='portfolio'>
           <MarqueeWrapper
             style={{
               marginTop: "50vh",

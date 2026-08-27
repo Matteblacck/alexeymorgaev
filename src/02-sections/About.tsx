@@ -1,7 +1,8 @@
 import styled, { keyframes } from "styled-components";
 import { fluidText } from "../05-shared/utils";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useLanguage } from "../05-shared/useLanguage";
+import { revealOnScroll } from "../05-shared/revealOnScroll";
 
 // Анимация для появления контейнера
 const fadeIn = keyframes`
@@ -20,7 +21,9 @@ const SectionContainer = styled.div`
   padding-top: 30vh;
   overflow: hidden;
   @media (max-width: 992px) {
-    height: 100vh;
+    min-height: 100vh;
+    height: auto;
+    padding-bottom: 12vh;
   }
 `;
 
@@ -29,7 +32,8 @@ const Container = styled.div`
   padding: 20px;
   z-index: 5;
   @media (max-width: 992px) {
-    height: 100vh;
+    min-height: 100vh;
+    height: auto;
   }
 `;
 
@@ -78,6 +82,15 @@ const MoreInfo = styled.div`
     font-size: ${fluidText(40, 25)};
     font-weight: 500;
     line-height: 1.2;
+  }
+
+  @media (max-width: 576px) {
+    max-width: 100%;
+
+    p span {
+      font-size: ${fluidText(31, 22)};
+      line-height: 1.16;
+    }
   }
 `;
 const marquee = keyframes`
@@ -140,32 +153,14 @@ const MarqueeText = styled.div`
 `;
 export default function About() {
   const { language } = useLanguage();
+  const sectionRef = useRef<HTMLDivElement>(null);
     
   useEffect(() => {
-    const elements = document.querySelectorAll('.hidden');
-    const elements2 = document.querySelectorAll(".hidden2");
-    
-    const observer1 = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting){
-                entry.target.classList.add('visible')
-                observer.unobserve(entry.target)
-            }
-        })
-    }, {threshold: 0.4})
-
-    const observer2 = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting){
-                entry.target.classList.add('visible2')
-                observer.unobserve(entry.target)
-            }
-        })
-    }, {threshold: 0.4})
-
-    elements.forEach((element) => observer1.observe(element));
-    elements2.forEach((element) => observer2.observe(element));
-  }, []);
+    return revealOnScroll(sectionRef.current, [
+      { selector: ".hidden", visibleClass: "visible" },
+      { selector: ".hidden2", visibleClass: "visible2" },
+    ]);
+  }, [language]);
 
   const textData = {
     en: {
@@ -196,7 +191,7 @@ export default function About() {
   const [reverseMarquee, setReverseMarquee] = useState(false);
   const marqueeText2 = "Warning! Frontend! ";
   return (
-    <SectionContainer id="about">
+    <SectionContainer ref={sectionRef} id="about">
         <MarqueeWrapper
         style={{ transform: "rotate(-20deg)", marginTop: "20vh", zIndex: "4", opacity: '0.3'}}
         onMouseEnter={() => setReverseMarquee(true)}
