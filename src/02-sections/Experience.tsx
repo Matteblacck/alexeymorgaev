@@ -704,16 +704,26 @@ const ModalOverlay = styled(motion.div)`
   position: fixed;
   inset: 0;
   z-index: 1200;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
   background: rgba(0, 0, 0, 0.86);
   backdrop-filter: blur(12px);
-  overflow-y: auto;
+  overflow: hidden;
 `;
 
 const ModalContainer = styled(motion.div)`
-  min-height: 100vh;
+  height: 100%;
   width: 100%;
   padding: 28px;
   color: var(--text);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 
   @media (max-width: 640px) {
     padding: 18px;
@@ -891,13 +901,12 @@ const modalVariants = {
 };
 
 const contentVariants = {
-  hidden: { opacity: 0, y: 40 },
+  hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    y: 0,
-    transition: { duration: 0.45, ease: [0.4, 0, 0.2, 1] },
+    transition: { duration: 0.25, ease: [0.4, 0, 0.2, 1] },
   },
-  exit: { opacity: 0, y: 30, transition: { duration: 0.2 } },
+  exit: { opacity: 0, transition: { duration: 0.2 } },
 };
 
 export default function Experience() {
@@ -967,7 +976,6 @@ export default function Experience() {
                 className="experience-hidden hidden2"
                 type="button"
                 onClick={() => setSelectedExperience(experience)}
-                whileTap={{ scale: 0.98 }}
               >
                 <CardAside>
                   <CardIndex>{String(index + 1).padStart(2, "0")}</CardIndex>
