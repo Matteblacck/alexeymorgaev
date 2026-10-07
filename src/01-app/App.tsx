@@ -95,7 +95,7 @@ function App() {
         <About />
         <Skills />
         <Experience />
-        <Portfolio />
+        {/* <Portfolio /> */}
         <Contacts />
       </main>
     </LanguageProvider>

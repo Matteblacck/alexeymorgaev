@@ -301,15 +301,15 @@ const experiencesEn: ExperienceItem[] = [
       {
         title: "Construction management CRM platform",
         brief:
-          "A SaaS/PWA CRM platform for construction and renovation companies. The app helps manage a site from start to handover: create projects, split them into stages, assign tasks, control deadlines, store photos and documents, communicate in project chats, track finances, and give clients limited guest access.",
+          "",
         experience: [
           {
             title: "Frontend",
             text: [
-              "Built the Next.js and TypeScript interface that construction teams use every day: project management, Kanban tasks and work progress, project media, team chats, a shared chat, and finance sections.",
-              "Used TanStack Query and Redux Toolkit for server data so the interface stayed fast and predictable with many project entities. Made project workflows clear for construction participants and made statuses quick to review and update.",
-              "Implemented guest access so clients could see site progress and materials without access to internal data. Also worked on support chat and a separate workspace for support employees.",
-              "Put special focus on the mobile version: added the PWA wrapper and reworked navigation and UI for more convenient on-site mobile use.",
+              "Built the Next.js and TypeScript interface that the construction team uses every day: a project management dashboard, a Kanban board for work progress, a media-file workspace, and chats. Implemented support on the site and an isolated workspace for support operators.",
+              "Implemented guest access so temporary limited access to a project could be given to third parties depending on the level of access they needed.",
+              "Put special focus on the mobile version of the app: implemented the PWA wrapper and significantly reworked navigation and design for more convenient work from mobile devices. Built convenient bottom navigation, moved functional buttons to the lower part of the screen, and assembled separate pages from scratch.",
+              "Used TanStack Query for server data so the interface updated quickly and stayed predictable with many entities. Made project management scenarios clear for all construction participants, and made task and stage statuses quick to review and update.",
             ],
           },
           {
@@ -317,7 +317,7 @@ const experiencesEn: ExperienceItem[] = [
             text: [
               "Designed the NestJS backend with PostgreSQL around real construction-company entities: projects, roles and permissions, finance tracking, worker and client interaction.",
               "Designed the PostgreSQL schema: described relations between users, organizations, projects, members, stages, tasks, files, chats, and financial operations; added migrations, indexes for frequent queries, soft-delete, and data archiving.",
-              "Configured input validation with class-validator and ValidationPipe, a unified error format through exception filters, rate limiting for auth flows, request and error logging, and Swagger/OpenAPI documentation for the REST API.",
+              "Configured input validation, a unified error format through exception filters, rate limiting for auth flows, request and error logging, and Swagger/OpenAPI documentation.",
               "Implemented a flexible permissions system so employees, managers, clients, and administrators saw only the data and actions they needed. Developed the realtime layer with Socket.IO for chats, project events, and notifications so the team could react faster to site changes.",
               "Built photo, document, and attachment uploads through S3-compatible object storage. Worked through the SaaS model: subscriptions, trial/demo access, feature limits for inactive subscriptions, guest links for clients, and a system admin panel for managing the platform.",
             ],
@@ -717,6 +717,7 @@ const ModalContainer = styled(motion.div)`
   width: 100%;
   padding: 28px;
   color: var(--text);
+  overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;
   scrollbar-width: none;
@@ -736,6 +737,15 @@ const ModalHeader = styled.div`
   align-items: flex-start;
   gap: 20px;
   padding-bottom: 28px;
+
+  > div {
+    min-width: 0;
+  }
+
+  @media (max-width: 520px) {
+    position: relative;
+    padding-right: 58px;
+  }
 `;
 
 const ModalEyebrow = styled.p`
@@ -751,6 +761,13 @@ const ModalTitle = styled.h3`
   font-weight: 700;
   line-height: 0.92;
   text-transform: uppercase;
+  overflow-wrap: anywhere;
+  word-break: normal;
+  hyphens: auto;
+
+  @media (max-width: 520px) {
+    font-size: clamp(2rem, 10vw, 2.5rem);
+  }
 `;
 
 const CloseButton = styled.button`
@@ -777,6 +794,12 @@ const CloseButton = styled.button`
     color: var(--highlited-text);
     transform: rotate(90deg);
     outline: none;
+  }
+
+  @media (max-width: 520px) {
+    position: absolute;
+    top: 0;
+    right: 0;
   }
 `;
 
