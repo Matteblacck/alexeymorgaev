@@ -5,11 +5,14 @@ import { useLanguage } from '../05-shared/useLanguage';
 import CardNav from '../05-shared/animations/nav/cardnav/CardNav';
 import type { CardNavItem } from '../05-shared/animations/nav/cardnav/CardNav';
 
+const brandIcon = `${import.meta.env.BASE_URL}icon.png`;
+
 const HeaderContainer = styled.div`
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
+    isolation: isolate;
     padding: 20px;
     opacity: 0;
     transition: opacity 0.1s ease-out; /* Плавное изменение прозрачности */
@@ -20,6 +23,28 @@ const HeaderContainer = styled.div`
     justify-content: space-between;
     align-items: flex-start;
     gap: 20px;
+
+    &::before {
+        content: '';
+        position: absolute;
+        z-index: -1;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 50px;
+        background: linear-gradient(
+            180deg,
+            rgba(0, 0, 0, 0.24) 0%,
+            rgba(0, 0, 0, 0.14) 36%,
+            rgba(0, 0, 0, 0.06) 70%,
+            transparent 100%
+        );
+        backdrop-filter: blur(3px);
+        -webkit-backdrop-filter: blur(3px);
+        mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.78) 38%, transparent 100%);
+        -webkit-mask-image: linear-gradient(180deg, #000 0%, rgba(0, 0, 0, 0.78) 38%, transparent 100%);
+        pointer-events: none;
+    }
 
     @media (max-width: 768px) {
         display: none;
@@ -63,6 +88,20 @@ const BrandColumn = styled.div`
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
+    flex: 0 0 auto;
+`;
+
+const BrandName = styled.h1`
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+`;
+
+const BrandLogo = styled.img`
+    width: 1.25em;
+    height: 1.25em;
+    object-fit: contain;
     flex: 0 0 auto;
 `;
 
@@ -110,6 +149,7 @@ const MobileHeaderContainer = styled.div`
     inset: 0 0 auto;
     width: 100%;
     min-height: 92px;
+    isolation: isolate;
     opacity: 0;
     transition: opacity 0.1s ease-out;
     z-index: 1000;
@@ -151,7 +191,6 @@ const mobileNavItems: CardNavItem[] = [
         textColor: '#050505',
         links: [
             { label: 'EXPERIENCE', href: '#experience', ariaLabel: 'Go to experience section' },
-            { label: 'PORTFOLIO', href: '#portfolio', ariaLabel: 'Go to portfolio section' },
         ],
     },
     {
@@ -198,14 +237,16 @@ export default function Header() {
             }}
         >
             <BrandColumn>
-                <h1>ALEXEY MORGAEV</h1>
+                <BrandName>
+                    <BrandLogo src={brandIcon} alt="" aria-hidden="true" />
+                    ALEXEY MORGAEV
+                </BrandName>
             </BrandColumn>
             <DesktopActions>
               <Nav>
                 <NavItem href="#" onClick={(e) => {e.preventDefault(); scrollToSection('home') }}>HOME</NavItem>
                 <NavItem href="#" onClick={(e) => {e.preventDefault(); scrollToSection('about') }}>ABOUT</NavItem>
                 <NavItem href="#" onClick={(e) => {e.preventDefault(); scrollToSection('experience') }}>EXPERIENCE</NavItem>
-                <NavItem href="#" onClick={(e) => {e.preventDefault(); scrollToSection('portfolio') }}>PORTFOLIO</NavItem>
                 <NavItem href="#" onClick={(e) => {e.preventDefault(); scrollToSection('contacts') }}>CONTACTS</NavItem>
               </Nav>
               <LanguageButton
@@ -225,6 +266,7 @@ export default function Header() {
         >
           <CardNav
             className="mobile-card-nav"
+            logo={brandIcon}
             logoText="ALEXEY MORGAEV"
             logoAlt="Alexey Morgaev"
             items={mobileNavItems}

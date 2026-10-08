@@ -67,11 +67,8 @@ const CardNav: React.FC<CardNavProps> = ({
           </button>
 
           <div className="logo-container">
-            {logo ? (
-              <img src={logo} alt={logoAlt} className="logo" />
-            ) : (
-              <span className="logo-text">{logoText}</span>
-            )}
+            {logo && <img src={logo} alt={logoAlt} className="logo" />}
+            {logoText && <span className="logo-text">{logoText}</span>}
           </div>
 
           {rightSlot && <div className="card-nav-right-slot">{rightSlot}</div>}

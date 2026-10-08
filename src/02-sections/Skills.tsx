@@ -4,6 +4,9 @@ import { useEffect, useRef, useState } from "react";
 import TechMarquee from "../05-shared/TechMarquee";
 import { techIcons } from "../05-shared/Icons";
 import { revealOnScroll } from "../05-shared/revealOnScroll";
+import { TbRobot } from "react-icons/tb";
+import { SiPostman } from "react-icons/si";
+import { VscVscode } from "react-icons/vsc";
 
 const SectionContainer = styled.div`
   width: 100%;
@@ -14,23 +17,112 @@ const SectionContainer = styled.div`
 
 // Контейнер для основного контента
 const Container = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
   position: relative;
   padding: 20px;
   z-index: 5;
   width: 100%; // Добавьте это
   padding-top: 20vh;
   @media (max-width: 768px) {
+    padding-left: 10px;
+    padding-right: 10px;
   }
 `;
 const SkillsContainer = styled.div`
   h3 {
     font-weight: 100;
   }
+
+  h3.hidden2 {
+    display: block;
+    width: 100%;
+  }
+
+  @media (max-width: 767px) {
+    h3 {
+      margin-bottom: 8px !important;
+      font-size: 17px;
+    }
+
+    gap: 10px !important;
+
+    > div {
+      padding-left: 5px;
+      padding-right: 5px;
+    }
+
+    .desktop-skill-list {
+      display: none;
+    }
+  }
 `;
 const SkillTypeContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 6px;
+`;
+
+const CompactSkillList = styled.div`
+  display: none;
+
+  @media (max-width: 767px) {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+`;
+
+const CompactSkillTag = styled.div`
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 29px;
+  max-width: 100%;
+  padding: 5px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 7px;
+  background: rgba(0, 0, 0, 0.24);
+
+  > span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+  }
+
+  svg {
+    width: 16px;
+    height: 16px;
+    flex: 0 0 auto;
+  }
+
+  p {
+    margin: 0;
+    font-size: 10px;
+    font-weight: 500;
+    line-height: 1.15;
+    text-transform: uppercase;
+    opacity: 0.82;
+  }
+`;
+
+const OtherSkillsSection = styled.div`
+  display: none;
+  width: 100%;
+  margin: 28px auto 0;
+
+  @media (max-width: 767px) {
+    display: block;
+  }
+
+  h3 {
+    margin-bottom: 10px;
+    font-size: ${fluidText(25, 17)};
+    font-weight: 300;
+  }
 `;
 
 const SkillTypeItem = styled.div<{ $align?: "left" | "right" }>`
@@ -268,9 +360,8 @@ export default function Skills() {
     { icon: techIcons.socketio, text: "Socket.IO" },
     { icon: techIcons.webpack, text: "Webpack, Vite" },
     { icon: techIcons.api, text: "REST API" },
+    { icon: techIcons.graphql, text: "GraphQL" },
     { icon: techIcons.fsd, text: "Feature-Sliced Design, BEM" },
-    { icon: techIcons.figma, text: "Figma" },
-    { icon: techIcons.english, text: "English Level - B2" },
   ];
 
   const backend = [
@@ -286,11 +377,66 @@ export default function Skills() {
     { icon: techIcons.docker, text: "Docker" },
     { icon: techIcons.nginx, text: "Nginx" },
     { icon: techIcons.gitlab, text: "GitLab CI/CD" },
-    { icon: techIcons.git, text: "Git (GitHub, GitLab)" },
     { icon: techIcons.deploy, text: "Production Deployment" },
     { icon: techIcons.jest, text: "Jest" },
     { icon: techIcons.cypress, text: "Cypress" },
     { icon: techIcons.k6, text: "k6 Load Testing" },
+  ];
+
+  const frontendCompact = [
+    { icon: techIcons.html, text: "HTML5" },
+    { icon: techIcons.html, text: "JSX" },
+    { icon: techIcons.css, text: "CSS3" },
+    { icon: techIcons.sass, text: "SASS" },
+    { icon: techIcons.bootstrap, text: "Bootstrap" },
+    { icon: techIcons.javascript, text: "JavaScript" },
+    { icon: techIcons.typescript, text: "TypeScript" },
+    { icon: techIcons.react, text: "React" },
+    { icon: techIcons.nextjs, text: "Next.js" },
+    { icon: techIcons.redux, text: "Redux" },
+    { icon: techIcons.reactQuery, text: "TanStack Query" },
+    { icon: techIcons.styledComponents, text: "Styled Components" },
+    { icon: techIcons.mui, text: "MUI" },
+    { icon: techIcons.radix, text: "Radix UI" },
+    { icon: techIcons.socketio, text: "Socket.IO" },
+    { icon: techIcons.webpack, text: "Webpack" },
+    { icon: techIcons.vite, text: "Vite" },
+    { icon: techIcons.api, text: "REST API" },
+    { icon: techIcons.graphql, text: "GraphQL" },
+    { icon: techIcons.fsd, text: "FSD" },
+    { icon: techIcons.fsd, text: "BEM" },
+  ];
+
+  const backendCompact = [
+    { icon: techIcons.nodejs, text: "Node.js" },
+    { icon: techIcons.nestjs, text: "NestJS 11" },
+    { icon: techIcons.postgresql, text: "PostgreSQL" },
+    { icon: techIcons.prisma, text: "Prisma ORM" },
+    { icon: techIcons.jwt, text: "JWT Auth" },
+    { icon: techIcons.api, text: "REST API" },
+    { icon: techIcons.socketio, text: "Socket.IO" },
+    { icon: techIcons.s3, text: "S3 Storage" },
+    { icon: techIcons.smtp, text: "SMTP" },
+    { icon: techIcons.api, text: "Web Push" },
+    { icon: techIcons.docker, text: "Docker" },
+    { icon: techIcons.nginx, text: "Nginx" },
+    { icon: techIcons.gitlab, text: "GitLab CI/CD" },
+    { icon: techIcons.deploy, text: "Production Deploy" },
+    { icon: techIcons.jest, text: "Jest" },
+    { icon: techIcons.cypress, text: "Cypress" },
+    { icon: techIcons.k6, text: "k6" },
+  ];
+
+  const otherSkills = [
+    { icon: techIcons.figma, text: "Figma" },
+    { icon: techIcons.git, text: "Git" },
+    { icon: techIcons.github, text: "GitHub" },
+    { icon: techIcons.gitlab, text: "GitLab" },
+    { icon: <VscVscode color="#007ACC" />, text: "VS Code" },
+    { icon: <TbRobot color="#D7FF35" />, text: "Codex" },
+    { icon: <SiPostman color="#FF6C37" />, text: "Postman" },
+    { icon: techIcons.english, text: "English B2" },
+    { icon: techIcons.english, text: "Russian Native" },
   ];
 
   useEffect(() => {
@@ -313,6 +459,7 @@ export default function Skills() {
         }}
         onMouseEnter={() => setReverseMarquee(true)}
         onMouseLeave={() => setReverseMarquee(false)}
+        data-marquee-parallax
       >
         <MarqueeTextWrapper
           key={reverseMarquee ? "reverse" : "normal"}
@@ -322,13 +469,13 @@ export default function Skills() {
         </MarqueeTextWrapper>
         <TechMarquee />
       </MarqueeWrapper>
-      <Container className="d-flex justify-content-center">
+      <Container>
         <SkillsContainer className="d-flex justify-content-center gap-3 flex-column flex-md-row pt-5">
           <div className="col-md-6">
             <h3 className="text-md-end text-start mb-2 hidden2">
               FRONTEND SKILLS
             </h3>
-            <SkillTypeContainer>
+            <SkillTypeContainer className="desktop-skill-list">
               {frontend.map(({ icon, text }, index) => (
                 <SkillTypeItem
                   $align="left"
@@ -340,11 +487,19 @@ export default function Skills() {
                 </SkillTypeItem>
               ))}
             </SkillTypeContainer>
+            <CompactSkillList>
+              {frontendCompact.map(({ icon, text }) => (
+                <CompactSkillTag key={text}>
+                  <span>{icon}</span>
+                  <p>{text}</p>
+                </CompactSkillTag>
+              ))}
+            </CompactSkillList>
           </div>
 
           <div className="col-md-6">
             <h3 className="mb-2 hidden1">BACKEND & DEVOPS SKILLS</h3>
-            <SkillTypeContainer>
+            <SkillTypeContainer className="desktop-skill-list">
               {backend.map(({ icon, text }, index) => (
                 <SkillTypeItem
                   $align="right"
@@ -356,8 +511,27 @@ export default function Skills() {
                 </SkillTypeItem>
               ))}
             </SkillTypeContainer>
+            <CompactSkillList>
+              {backendCompact.map(({ icon, text }) => (
+                <CompactSkillTag key={text}>
+                  <span>{icon}</span>
+                  <p>{text}</p>
+                </CompactSkillTag>
+              ))}
+            </CompactSkillList>
           </div>
         </SkillsContainer>
+        <OtherSkillsSection>
+          <h3 className="hidden2">TOOLS &amp; LANGUAGES</h3>
+          <CompactSkillList>
+            {otherSkills.map(({ icon, text }) => (
+              <CompactSkillTag key={text}>
+                <span>{icon}</span>
+                <p>{text}</p>
+              </CompactSkillTag>
+            ))}
+          </CompactSkillList>
+        </OtherSkillsSection>
       </Container>
     </SectionContainer>
   );

@@ -1,5 +1,8 @@
 import './App.css';
 import styled from 'styled-components';
+import { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 import SideRays from '../05-shared/animations/bg/SideRays';
 
@@ -8,7 +11,6 @@ import About from '../02-sections/About';
 import Header from '../02-sections/Header';
 import Skills from '../02-sections/Skills';
 import Experience from '../02-sections/Experience';
-import Portfolio from '../02-sections/Portfolio';
 import Contacts from '../02-sections/Contacts';
 import { LanguageProvider } from '../05-shared/LanguageProvider';
 
@@ -47,6 +49,34 @@ const Rays = styled.div`
   }
 `;
 function App() {
+  const mainRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const main = mainRef.current;
+    if (!main || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    gsap.registerPlugin(ScrollTrigger);
+    const context = gsap.context(() => {
+      gsap.utils.toArray<HTMLElement>('[data-marquee-parallax]', main).forEach((marquee) => {
+        const section = marquee.closest<HTMLElement>('[id]');
+        if (!section) return;
+
+        gsap.to(marquee, {
+          y: 110,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: section,
+            start: 'top bottom',
+            end: 'bottom top',
+            scrub: 0.5,
+          },
+        });
+      });
+    }, main);
+
+    return () => context.revert();
+  }, []);
+
   return (
 
     <LanguageProvider>
@@ -90,12 +120,11 @@ function App() {
         <Header />
       </header>
 
-      <main>
+      <main ref={mainRef}>
         <Home />
         <About />
         <Skills />
         <Experience />
-        {/* <Portfolio /> */}
         <Contacts />
       </main>
     </LanguageProvider>

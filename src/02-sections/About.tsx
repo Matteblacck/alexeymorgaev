@@ -1,18 +1,9 @@
 import styled, { keyframes } from "styled-components";
 import { fluidText } from "../05-shared/utils";
-import { useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { useLanguage } from "../05-shared/useLanguage";
 import { revealOnScroll } from "../05-shared/revealOnScroll";
-
-// Анимация для появления контейнера
-const fadeIn = keyframes`
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-`;
+import { formatExperienceDuration, totalExperienceMonths } from "./Experience";
 
 const SectionContainer = styled.div`
   width: 100%;
@@ -42,9 +33,12 @@ const GeneralInfo = styled.div`
   max-width: 500px;
   word-wrap: break-word;
   white-space: normal;
-  opacity: 0; /* Начальная невидимость */
-  animation: ${fadeIn} 1s forwards; /* Анимация появления */
   
+  h1 span.hidden2,
+  p span.hidden2 {
+    margin-right: 0.14em;
+  }
+
   h1 span {
     font-weight: 100;
     font-size: ${fluidText(22, 18)};
@@ -57,6 +51,10 @@ const GeneralInfo = styled.div`
     font-weight: 500;
     line-height: 1.2;
   }
+
+  p span.experience-word {
+    color: var(--highlited-text);
+  }
 `;
 
 const MoreInfo = styled.div`
@@ -65,8 +63,12 @@ const MoreInfo = styled.div`
   word-wrap: break-word;
   white-space: normal;
   margin-top: 30vh;
-  opacity: 0; /* Начальная невидимость */
-  animation: ${fadeIn} 1s forwards; /* Анимация появления */
+
+  h1 span.hidden2,
+  p span.hidden2 {
+    margin-right: 0.14em;
+  }
+
   @media (max-width: 992px) {
     margin-top: 0;
   }
@@ -151,9 +153,29 @@ const MarqueeText = styled.div`
   white-space: nowrap;
   padding-right: 20px; // Отступ между копиями текста
 `;
+
+const renderAnimatedWords = (text: string, stagger = false, highlight = false) => {
+  const words = text.split(" ");
+
+  return words.map((word, index) => (
+    <Fragment key={`${index}-${word}`}>
+      <span
+        className={`hidden2${highlight ? " experience-word" : ""}`}
+        style={stagger ? { transitionDelay: `${index * 0.018}s` } : undefined}
+      >
+        {word}
+      </span>
+      {index < words.length - 1 ? " " : null}
+    </Fragment>
+  ));
+};
+
 export default function About() {
   const { language } = useLanguage();
   const sectionRef = useRef<HTMLDivElement>(null);
+
+  const experienceLabel = language === "en" ? "EXPERIENCE" : "ОПЫТ РАБОТЫ";
+  const experienceDuration = formatExperienceDuration(totalExperienceMonths, language).toUpperCase();
     
   useEffect(() => {
     return revealOnScroll(sectionRef.current, [
@@ -166,7 +188,7 @@ export default function About() {
     en: {
       general: [
         "SEVERAL FACTS ABOUT ME:",
-        "BORN IN: IRKUTSK",
+        `${experienceLabel}: ${experienceDuration}`,
         "LIVE IN: MOSCOW",
         "LOVE: CODE",
       ],
@@ -178,7 +200,7 @@ export default function About() {
     ru: {
       general: [
         "НЕСКОЛЬКО ФАКТОВ ОБО МНЕ:",
-        "РОДИЛСЯ В: ИРКУТСКЕ",
+        `${experienceLabel}: ${experienceDuration}`,
         "ЖИВУ В: МОСКВЕ",
         "ЛЮБЛЮ: КОД",
       ],
@@ -196,7 +218,8 @@ export default function About() {
         style={{ transform: "rotate(-20deg)", marginTop: "20vh", zIndex: "4", opacity: '0.3'}}
         onMouseEnter={() => setReverseMarquee(true)}
         onMouseLeave={() => setReverseMarquee(false)}
-        className="hidden"
+        className="hidden about-marquee"
+        data-marquee-parallax
       >
         <MarqueeTextWrapper
           key={reverseMarquee ? "reverse" : "normal"}
@@ -209,20 +232,12 @@ export default function About() {
         <div className="d-flex justify-content-around flex-column flex-lg-row gap-5 justify-content-center">
           <GeneralInfo>
             <h1>
-              {textData.general[0].split(" ").map((word, index) => (
-                <span key={index} className="hidden2">
-                  {word}{" "}
-                </span>
-              ))}
+              {renderAnimatedWords(textData.general[0])}
             </h1>
             <p>
               {textData.general.slice(1).map((line, lineIndex) => (
                 <span key={lineIndex}>
-                  {line.split(" ").map((word, index) => (
-                    <span key={index} className="hidden2" style={{ transitionDelay: `${index * 0.1}s` }}>
-                      {word}{" "}
-                    </span>
-                  ))}
+                  {renderAnimatedWords(line, true, lineIndex === 0)}
                   <br />
                 </span>
               ))} 
@@ -230,18 +245,10 @@ export default function About() {
           </GeneralInfo>
           <MoreInfo >
             <h1>
-              {textData.more[0].split(" ").map((word, index) => (
-                <span key={index} className="hidden2">
-                  {word}{" "}
-                </span>
-              ))}
+              {renderAnimatedWords(textData.more[0])}
             </h1>
             <p>
-              {textData.more[1].split(" ").map((word, index) => (
-                <span key={index} className="hidden2" style={{ transitionDelay: `${index * 0.1}s` }}>
-                  {word}{" "}
-                </span>
-              ))}
+              {renderAnimatedWords(textData.more[1], true)}
             </p>
           </MoreInfo>
         </div>

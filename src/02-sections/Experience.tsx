@@ -1,10 +1,49 @@
 import { useEffect, useRef, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { AnimatePresence, motion } from "framer-motion";
-import { TbArrowUpRight, TbX } from "react-icons/tb";
+import { TbClick, TbHandClick, TbX } from "react-icons/tb";
 import { fluidText } from "../05-shared/utils";
+import { techIcons } from "../05-shared/Icons";
 import { useLanguage } from "../05-shared/useLanguage";
 import { revealOnScroll } from "../05-shared/revealOnScroll";
+
+const idCardSrc = `${import.meta.env.BASE_URL}images/idcard.webp`;
+const dugaSrc = `${import.meta.env.BASE_URL}images/duga.webp`;
+
+const technologyIconKeys: Record<string, string> = {
+  "next.js": "nextjs",
+  "react query": "reactQuery",
+  "tanstack query": "reactQuery",
+  "redux toolkit": "redux",
+  redux: "redux",
+  nextauth: "nextAuth",
+  "react hook form": "react",
+  mui: "mui",
+  pwa: "api",
+  nestjs: "nestjs",
+  "node.js": "nodejs",
+  postgresql: "postgresql",
+  "prisma orm": "prisma",
+  prisma: "prisma",
+  "socket.io": "socketio",
+  websocket: "socketio",
+  jwt: "jwt",
+  s3: "s3",
+  smtp: "smtp",
+  docker: "docker",
+  nginx: "nginx",
+  "gitlab ci": "gitlab",
+  "gitlab ci/cd": "gitlab",
+  jest: "jest",
+  cypress: "cypress",
+  k6: "k6",
+  typescript: "typescript",
+  react: "react",
+  fsd: "fsd",
+};
+
+const getTechnologyIcon = (technology: string) =>
+  techIcons[technologyIconKeys[technology.toLowerCase()] ?? "api"];
 
 type ExperienceProject = {
   title: string;
@@ -20,7 +59,7 @@ type ExperienceItem = {
   company: string;
   location?: string;
   period: string;
-  duration: string;
+  durationMonths: number;
   role: string;
   domain?: string;
   summary: string;
@@ -34,13 +73,13 @@ type ExperienceItem = {
 
 const experiencesRu: ExperienceItem[] = [
   {
-    company: "Строительная CRM",
-    period: "Февраль 2026 — Сентябрь 2026",
-    duration: "8 месяцев",
+    company: "Платформа для управления строительством",
+    period: "Февраль 2026 — Октябрь 2026",
+    durationMonths: 9,
     role: "Fullstack-разработчик",
-    domain: "SaaS/PWA, CRM для управления строительством",
+    domain: "SaaS/PWA, управление строительством",
     summary:
-      "CRM для управления строительством: единое пространство для проектов, задач, команды, файлов, коммуникации и финансов.",
+      "Платформа для управления строительством: единое пространство для проектов, задач, команды, файлов, коммуникации и финансов.",
     highlights: [
       "Помог превратить разрозненное ведение объектов в единый цифровой процесс от старта проекта до сдачи работ.",
       "Сделал прозрачным контроль этапов, задач, сроков, ответственных и статусов для команды и руководителей.",
@@ -50,7 +89,7 @@ const experiencesRu: ExperienceItem[] = [
     ],
     projects: [
       {
-        title: "CRM платформа для управления строительством",
+        title: "Платформа для управления строительством",
         brief:
           "",
         experience: [
@@ -137,7 +176,7 @@ const experiencesRu: ExperienceItem[] = [
     company: "CN-IRK Logistics",
     location: "Москва",
     period: "Июнь 2025 — январь 2026",
-    duration: "7 месяцев",
+    durationMonths: 7,
     role: "Fullstack-разработчик",
     domain: "Перевозки, логистика, склад.",
     summary:
@@ -193,7 +232,7 @@ const experiencesRu: ExperienceItem[] = [
   {
     company: "Sibdev",
     period: "Февраль 2024 — Июнь 2025",
-    duration: "1 год 5 месяцев",
+    durationMonths: 17,
     role: "Frontend-разработчик",
     summary:
       "Клиентские части продуктовых проектов: игровая биржа и краудфандинговая платформа для школ.",
@@ -247,7 +286,7 @@ const experiencesRu: ExperienceItem[] = [
     company: "ЛитРес",
     location: "Москва",
     period: "Январь 2023 — Январь 2024",
-    duration: "1 год 1 месяц",
+    durationMonths: 13,
     role: "Frontend-разработчик",
     domain:
       "Информационные технологии, системная интеграция, интернет",
@@ -281,15 +320,46 @@ const experiencesRu: ExperienceItem[] = [
   },
 ];
 
+export const totalExperienceMonths = experiencesRu.reduce(
+  (total, experience) => total + experience.durationMonths,
+  0
+);
+
+const russianPlural = (count: number, forms: [string, string, string]) => {
+  const remainder100 = count % 100;
+  const remainder10 = count % 10;
+  if (remainder100 >= 11 && remainder100 <= 14) return forms[2];
+  if (remainder10 === 1) return forms[0];
+  if (remainder10 >= 2 && remainder10 <= 4) return forms[1];
+  return forms[2];
+};
+
+export function formatExperienceDuration(months: number, language: "en" | "ru") {
+  const years = Math.floor(months / 12);
+  const remainingMonths = months % 12;
+
+  if (language === "en") {
+    return [
+      years > 0 ? `${years} ${years === 1 ? "year" : "years"}` : "",
+      remainingMonths > 0 ? `${remainingMonths} ${remainingMonths === 1 ? "month" : "months"}` : "",
+    ].filter(Boolean).join(" ");
+  }
+
+  return [
+    years > 0 ? `${years} ${russianPlural(years, ["год", "года", "лет"])}` : "",
+    remainingMonths > 0 ? `${remainingMonths} ${russianPlural(remainingMonths, ["месяц", "месяца", "месяцев"])}` : "",
+  ].filter(Boolean).join(" ");
+}
+
 const experiencesEn: ExperienceItem[] = [
   {
-    company: "CRM platform",
-    period: "February 2026 - September 2026",
-    duration: "8 months",
+    company: "Construction Management Platform",
+    period: "February 2026 - October 2026",
+    durationMonths: 9,
     role: "Fullstack Developer",
-    domain: "SaaS/PWA, construction management CRM",
+    domain: "SaaS/PWA construction management",
     summary:
-      "A construction management CRM: one workspace for projects, tasks, teams, files, communication, and finances.",
+      "A construction management platform: one workspace for projects, tasks, teams, files, communication, and finances.",
     highlights: [
       "Helped turn fragmented site management into one digital workflow from project launch to handover.",
       "Made stages, tasks, deadlines, owners, and statuses transparent for teams and managers.",
@@ -299,7 +369,7 @@ const experiencesEn: ExperienceItem[] = [
     ],
     projects: [
       {
-        title: "Construction management CRM platform",
+        title: "Construction Management Platform",
         brief:
           "",
         experience: [
@@ -338,7 +408,7 @@ const experiencesEn: ExperienceItem[] = [
     company: "CN-IRK Logistics",
     location: "Moscow",
     period: "June 2025 - January 2026",
-    duration: "7 months",
+    durationMonths: 7,
     role: "Fullstack Developer",
     domain: "Transportation, logistics, warehousing.",
     summary:
@@ -381,7 +451,7 @@ const experiencesEn: ExperienceItem[] = [
   {
     company: "Sibdev",
     period: "February 2024 - June 2025",
-    duration: "1 year 5 months",
+    durationMonths: 17,
     role: "Frontend Developer",
     summary:
       "Client-side product work: a gaming marketplace and a crowdfunding platform for schools.",
@@ -426,7 +496,7 @@ const experiencesEn: ExperienceItem[] = [
     company: "LitRes",
     location: "Moscow",
     period: "January 2023 - January 2024",
-    duration: "1 year 1 month",
+    durationMonths: 13,
     role: "Frontend Developer",
     domain: "Information technology, systems integration, internet",
     summary:
@@ -453,6 +523,25 @@ const experiencesEn: ExperienceItem[] = [
     stack: experiencesRu[3].stack,
   },
 ];
+
+const getCardTechnologies = (experience: ExperienceItem, index: number) => {
+  const allTechnologies = experience.stack.flatMap((group) => group.items);
+  if (index > 1) return allTechnologies.slice(0, 6);
+
+  const frontend = experience.stack.find((group) => group.label.toLowerCase() === "frontend");
+  const backend = experience.stack.find((group) => group.label.toLowerCase() === "backend");
+  const devops = experience.stack.find((group) => group.label.toLowerCase() === "devops");
+  if (!frontend || !backend || !devops) return allTechnologies.slice(0, 6);
+
+  const backendCore = backend.items
+    .filter((technology) => /^(nestjs|postgresql|prisma(?: orm)?)$/i.test(technology))
+    .slice(0, 2);
+  const devopsCore = devops.items
+    .filter((technology) => /^(docker|nginx|gitlab ci(?:\/cd)?)$/i.test(technology))
+    .slice(0, 3);
+
+  return [...new Set([...frontend.items.slice(0, 3), ...backendCore, ...devopsCore])];
+};
 
 const SectionContainer = styled.section`
   width: 100%;
@@ -516,15 +605,15 @@ const MarqueeText = styled.div`
 `;
 
 const HeaderRow = styled.div`
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(220px, 420px);
-  gap: 32px;
-  align-items: end;
+  display: flex;
+  justify-content: flex-start;
+  gap: clamp(0px, 0.5vw, 6px);
+  align-items: center;
   max-width: 1180px;
   margin: 0 auto 10vh;
 
   @media (max-width: 768px) {
-    grid-template-columns: 1fr;
+    gap: 12px;
     margin-bottom: 7vh;
   }
 `;
@@ -536,61 +625,126 @@ const Title = styled.h2`
   line-height: 0.92;
   text-transform: uppercase;
   max-width: 720px;
+  min-width: 0;
+  margin: 0;
+  flex: 0 1 auto;
+
+  @media (max-width: 420px) {
+    font-size: clamp(28px, 9vw, 36px);
+  }
+`;
+
+const IdCardDecoration = styled(motion.img)`
+  display: block;
+  width: clamp(72px, 17vw, 175px);
+  height: auto;
+  flex: 0 0 auto;
+  margin-right: 0;
+  rotate: -9deg;
+  filter: drop-shadow(0 16px 24px rgba(215, 255, 53, 0.12));
+  transition: rotate 420ms cubic-bezier(0.2, 0.7, 0.2, 1), translate 420ms cubic-bezier(0.2, 0.7, 0.2, 1);
+
+  ${HeaderRow}:hover & {
+    rotate: -4deg;
+    translate: 0 -5px;
+  }
+
+  @media (max-width: 768px) {
+    width: clamp(68px, 17vw, 128px);
+  }
+
+  @media (max-width: 420px) {
+    width: clamp(54px, 16vw, 68px);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
 `;
 
 const ExperienceList = styled.div`
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  gap: 24px;
+  column-gap: 24px;
+  row-gap: clamp(36px, 4vw, 56px);
   max-width: 1180px;
   margin: 0 auto;
 
   @media (max-width: 900px) {
     display: flex;
     flex-direction: column;
+    row-gap: 24px;
   }
 `;
 
+const cardWave = keyframes`
+  0%, 100% { translate: 0 0; rotate: 0deg; }
+  12% { translate: 0 -1px; rotate: -0.2deg; }
+  24%, 36% { translate: 0 0; rotate: 0deg; }
+  48% { translate: 0 1px; rotate: 0.2deg; }
+  60%, 72% { translate: 0 0; rotate: 0deg; }
+`;
+
 const ExperienceCard = styled(motion.button)<{ $index: number }>`
-  grid-column: ${({ $index }) => ($index % 2 === 0 ? "1 / span 8" : "5 / span 8")};
+  grid-column: ${({ $index }) => ($index % 2 === 0 ? "1 / span 7" : "6 / span 7")};
   display: grid;
-  grid-template-columns: 120px minmax(0, 1fr);
-  gap: 22px;
-  min-height: 260px;
-  padding: 24px;
+  grid-template-columns: minmax(150px, 0.24fr) minmax(0, 1fr);
+  gap: clamp(24px, 3vw, 48px);
+  min-height: 250px;
+  padding: clamp(24px, 3vw, 38px) clamp(24px, 3.4vw, 44px);
   border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 8px;
-  background: rgba(0, 0, 0, 0.28);
+  border-radius: clamp(14px, 1.5vw, 20px);
+  background: #080907;
   color: var(--text);
   text-align: left;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
+  isolation: isolate;
   cursor: pointer;
-  backdrop-filter: blur(10px);
-  transition: border-color 0.3s ease, transform 0.3s ease, background 0.3s ease;
+  backdrop-filter: blur(6px);
+  opacity: 0;
+  translate: 0 36px;
+  transition:
+    opacity 0.65s ease ${({ $index }) => `${Math.min($index * 90, 270)}ms`},
+    translate 0.75s cubic-bezier(0.16, 1, 0.3, 1) ${({ $index }) => `${Math.min($index * 90, 270)}ms`},
+    transform 0.3s ease,
+    border-color 0.3s ease,
+    background-color 0.3s ease;
+
+  &.visible2 {
+    opacity: 1;
+    translate: 0 0;
+    animation: ${cardWave} 6s ease-in-out ${({ $index }) => 850 + $index * 180}ms infinite;
+  }
 
   &::before {
     content: "";
     position: absolute;
-    inset: 0;
-    background: linear-gradient(120deg, transparent, rgba(215, 255, 53, 0.16), transparent);
-    opacity: 0;
-    transform: translateX(-100%);
-    transition: opacity 0.3s ease, transform 0.6s ease;
+    top: clamp(16px, 1.5vw, 20px);
+    bottom: clamp(16px, 1.5vw, 20px);
+    left: 1px;
+    width: 2px;
+    border-radius: 999px;
+    background: var(--highlited-text);
+    opacity: 0.35;
+    transform: scaleY(0.42);
+    transform-origin: center;
+    transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
   }
 
   &:hover,
   &:focus-visible {
-    border-color: var(--highlited-text);
-    background: rgba(255, 255, 255, 0.05);
-    transform: translateY(-6px);
+    transition: border-color 0.3s ease, transform 0.3s ease, background-color 0.3s ease;
+    border-color: rgba(215, 255, 53, 0.62);
+    background: #080907;
+    transform: translateY(-4px) rotate(${({ $index }) => ($index % 2 === 0 ? "-1deg" : "1deg")});
     outline: none;
   }
 
   &:hover::before,
   &:focus-visible::before {
     opacity: 1;
-    transform: translateX(100%);
+    transform: scaleY(1);
   }
 
   @media (max-width: 900px) {
@@ -600,7 +754,63 @@ const ExperienceCard = styled(motion.button)<{ $index: number }>`
   @media (max-width: 560px) {
     grid-template-columns: 1fr;
     min-height: 0;
-    padding: 20px;
+    gap: 16px;
+    padding: 24px 22px;
+    background: #080907;
+    border-color: rgba(255, 255, 255, 0.12);
+
+    &:hover,
+    &:focus-visible {
+      background: #080907;
+      border-color: rgba(215, 255, 53, 0.34);
+      transform: none;
+    }
+
+    &:hover::before,
+    &:focus-visible::before {
+      opacity: 0.35;
+      transform: scaleY(0.42);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+    animation: none;
+
+    &:hover,
+    &:focus-visible {
+      transform: none;
+    }
+  }
+`;
+
+const DugaConnector = styled.img<{ $index: number }>`
+  display: none;
+
+  @media (min-width: 901px) {
+    position: absolute;
+    top: 50%;
+    z-index: -1;
+    width: clamp(300px, 34vw, 420px);
+    height: auto;
+    opacity: 0.82;
+    pointer-events: none;
+    user-select: none;
+
+    ${({ $index }) => $index % 2 === 0 ? `
+      left: 100%;
+      right: auto;
+      translate: -4% -83%;
+      rotate: 50deg;
+      scale: 1 1;
+      transform-origin: 4% 83%;
+    ` : `
+      right: 100%;
+      left: auto;
+      translate: 4% -83%;
+      transform: rotate(-50deg) scaleX(-1);
+      transform-origin: 96% 83%;
+    `}
   }
 `;
 
@@ -611,6 +821,16 @@ const CardAside = styled.div`
   flex-direction: column;
   justify-content: space-between;
   min-width: 0;
+  padding-right: clamp(16px, 2vw, 28px);
+  border-right: 1px solid rgba(255, 255, 255, 0.12);
+
+  @media (max-width: 560px) {
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 16px;
+    padding-right: 0;
+    border-right: 0;
+  }
 `;
 
 const CardIndex = styled.span`
@@ -624,11 +844,16 @@ const CardIndex = styled.span`
 const CardPeriod = styled.span`
   display: block;
   color: var(--text);
-  font-size: ${fluidText(16, 13)};
+  font-size: ${fluidText(14, 12)};
   font-weight: 500;
-  line-height: 1.25;
+  line-height: 1.35;
   opacity: 0.68;
   text-transform: uppercase;
+
+  @media (max-width: 560px) {
+    max-width: 64%;
+    text-align: right;
+  }
 `;
 
 const CardMain = styled.div`
@@ -668,9 +893,62 @@ const Tags = styled.div`
   margin-top: 22px;
 `;
 
+const CardAction = styled.span`
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 22px;
+  padding: 7px 11px;
+  border: 1px solid rgba(215, 255, 53, 0.38);
+  border-radius: 999px;
+  color: var(--highlited-text);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  text-transform: uppercase;
+  transition: background-color 0.25s ease, border-color 0.25s ease;
+
+  ${ExperienceCard}:hover &, ${ExperienceCard}:focus-visible & {
+    background-color: rgba(215, 255, 53, 0.1);
+    border-color: rgba(215, 255, 53, 0.72);
+  }
+`;
+
+const CardActionIcon = styled.span`
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+
+  svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    stroke-width: 1.8;
+  }
+
+  .tap-icon {
+    display: none;
+  }
+
+  @media (max-width: 768px) {
+    .click-icon {
+      display: none;
+    }
+
+    .tap-icon {
+      display: block;
+    }
+  }
+`;
+
 const Tag = styled.span`
   display: inline-flex;
   align-items: center;
+  gap: 7px;
   min-height: 30px;
   padding: 5px 10px;
   border: 1px solid rgba(255, 255, 255, 0.12);
@@ -683,22 +961,27 @@ const Tag = styled.span`
   opacity: 0.86;
 `;
 
-const More = styled.span`
+const TechIcon = styled.span`
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  margin-top: 24px;
-  color: var(--text);
-  font-size: ${fluidText(16, 14)};
-  font-weight: 600;
-  text-transform: uppercase;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 15px;
+  height: 15px;
 
   svg {
-    width: 20px;
-    height: 20px;
-    color: var(--highlited-text);
+    display: block;
+    width: 100%;
+    height: 100%;
   }
 `;
+
+const TechnologyTag = ({ name }: { name: string }) => (
+  <Tag>
+    <TechIcon aria-hidden="true">{getTechnologyIcon(name)}</TechIcon>
+    <span>{name}</span>
+  </Tag>
+);
 
 const ModalOverlay = styled(motion.div)`
   position: fixed;
@@ -977,6 +1260,7 @@ export default function Experience() {
           }}
           onMouseEnter={() => setReverseMarquee(true)}
           onMouseLeave={() => setReverseMarquee(false)}
+          data-marquee-parallax
         >
           <MarqueeTextWrapper
             key={reverseMarquee ? "reverse" : "normal"}
@@ -989,6 +1273,13 @@ export default function Experience() {
         <Container>
           <HeaderRow>
             <Title className="experience-hidden hidden2">EXPERIENCE</Title>
+            <IdCardDecoration
+              className="experience-hidden hidden2"
+              src={idCardSrc}
+              alt=""
+              aria-hidden="true"
+              initial={false}
+            />
           </HeaderRow>
 
           <ExperienceList>
@@ -1005,7 +1296,7 @@ export default function Experience() {
                   <CardPeriod>
                     {experience.period}
                     <br />
-                    {experience.duration}
+                    {formatExperienceDuration(experience.durationMonths, language)}
                   </CardPeriod>
                 </CardAside>
 
@@ -1014,18 +1305,21 @@ export default function Experience() {
                   <Role>{experience.role}</Role>
                   <Summary>{experience.summary}</Summary>
                   <Tags>
-                    {experience.stack
-                      .flatMap((group) => group.items)
-                      .slice(0, 6)
-                      .map((item) => (
-                        <Tag key={item}>{item}</Tag>
-                      ))}
+                    {getCardTechnologies(experience, index).map((item) => (
+                      <TechnologyTag key={item} name={item} />
+                    ))}
                   </Tags>
-                  <More>
-                    {language === "en" ? "More details" : "Подробнее"}
-                    <TbArrowUpRight />
-                  </More>
+                  <CardAction>
+                    {language === "en" ? "View details" : "Подробнее"}
+                    <CardActionIcon aria-hidden="true">
+                      <TbClick className="click-icon" />
+                      <TbHandClick className="tap-icon" />
+                    </CardActionIcon>
+                  </CardAction>
                 </CardMain>
+                {index < experiences.length - 1 && (
+                  <DugaConnector src={dugaSrc} alt="" aria-hidden="true" $index={index} />
+                )}
               </ExperienceCard>
             ))}
           </ExperienceList>
@@ -1068,7 +1362,7 @@ export default function Experience() {
                   </MetaItem>
                   <MetaItem>
                     <span>{language === "en" ? "Duration" : "Длительность"}</span>
-                    <p>{selectedExperience.duration}</p>
+                    <p>{formatExperienceDuration(selectedExperience.durationMonths, language)}</p>
                   </MetaItem>
                   {selectedExperience.location && (
                     <MetaItem>
@@ -1112,7 +1406,7 @@ export default function Experience() {
                       {project.stack && (
                         <Tags>
                           {project.stack.map((item) => (
-                            <Tag key={item}>{item}</Tag>
+                            <TechnologyTag key={item} name={item} />
                           ))}
                         </Tags>
                       )}
@@ -1127,7 +1421,7 @@ export default function Experience() {
                           <StackTitle>{group.label}</StackTitle>
                           <Tags>
                             {group.items.map((item) => (
-                              <Tag key={item}>{item}</Tag>
+                              <TechnologyTag key={item} name={item} />
                             ))}
                           </Tags>
                         </div>

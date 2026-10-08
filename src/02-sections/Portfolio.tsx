@@ -267,6 +267,7 @@ export default function Portfolio(){
               transform: "rotate(-28deg)",
               opacity: "0.4",
             }}
+            data-marquee-parallax
           >
             <MarqueeTextWrapper reverse={false}>
               <MarqueeText>{marqueeText.repeat(1000)}</MarqueeText>
