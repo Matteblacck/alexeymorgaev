@@ -2498,7 +2498,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
 `,qB=Q.img`
   display: block;
   flex: 0 0 auto;
-  width: clamp(54px, 6.5vw, 90px);
+  width: clamp(60px, 7vw, 100px);
   margin-left: -0.85rem;
   height: auto;
   object-fit: contain;
@@ -2506,7 +2506,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
   filter: drop-shadow(0 8px 14px rgba(0, 0, 0, 0.35));
 
   @media (max-width: 520px) {
-    width: 54px;
+    width: 60px;
   }
 `,XB=Q.p`
   font-size: ${me(70,25)};
@@ -2700,6 +2700,10 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
   border-top: 1px solid rgba(215, 255, 53, 0.36);
   background: #000;
   box-shadow: 0 -18px 56px rgba(0, 0, 0, 0.12);
+
+  @media (max-width: 420px) {
+    padding-inline: 0.9rem;
+  }
 `,KB=Q.div`
   display: flex;
   align-items: center;
@@ -2709,8 +2713,32 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
   margin: 0 auto;
 
   @media (max-width: 600px) {
-    align-items: flex-start;
-    flex-direction: column;
+    display: grid;
+    grid-template-columns: auto max-content;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+
+    > a {
+      grid-column: 1 / -1;
+      justify-self: end;
+    }
+  }
+
+  @media (max-width: 420px) {
+    column-gap: 0.5rem;
+
+    > p:first-child {
+      font-size: 10px;
+      white-space: nowrap;
+    }
+
+    > p:nth-child(2) {
+      gap: 0.2rem;
+      font-size: 8px;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+    }
   }
 `,QB=Q.p`
   margin: 0;
@@ -2730,8 +2758,7 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
   text-transform: uppercase;
   opacity: 0.72;
 
-  strong,
-  span:last-child {
+  strong {
     color: var(--highlited-text);
   }
 `,tV=Q.a`
@@ -2746,9 +2773,20 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
   transition: color 180ms ease;
 
   span {
-    color: var(--highlited-text);
-    font-size: 17px;
-    transition: transform 180ms ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text);
+    opacity: 0.82;
+    width: 1em;
+    height: 1em;
+    transition: transform 180ms ease, opacity 180ms ease;
+  }
+
+  span svg {
+    display: block;
+    width: 100%;
+    height: 100%;
   }
 
   &:hover,
@@ -2759,9 +2797,10 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
 
   &:hover span,
   &:focus-visible span {
-    transform: translateY(-3px);
+    transform: translateY(-2px);
+    opacity: 1;
   }
-`;function eV(){const{language:e}=qu(),t=new Date().getFullYear();return M.jsxs(UB,{id:"contacts",children:[M.jsx(FB,{children:M.jsxs(HB,{children:[M.jsx(Fr.div,{initial:{opacity:0,y:20},whileInView:{opacity:1,y:0},viewport:{once:!0},transition:{duration:.5},children:M.jsxs(YB,{children:["Contact Me",M.jsx(qB,{src:VB,alt:"","aria-hidden":"true"})]})}),M.jsx(Fr.div,{initial:{opacity:0,y:20},whileInView:{opacity:1,y:0},viewport:{once:!0},transition:{duration:.5,delay:.2},children:M.jsx(XB,{children:e==="en"?"I'm Always Open To New Projects And Opportunities. Let's Create Something Amazing Together!":"Я Всегда Открыт К Новым Проектам И Возможностям. Давайте Создадим Что-То Сильное Вместе!"})}),M.jsx(GB,{}),M.jsx(Fr.div,{initial:{opacity:0,y:20},whileInView:{opacity:1,y:0},viewport:{once:!0},transition:{duration:.5,delay:.4},children:M.jsx($B,{children:M.jsxs(IB,{children:[M.jsxs(Wp,{href:"https://github.com/matteblacck",target:"_blank",rel:"noopener noreferrer","aria-label":"GitHub profile",children:[M.jsx("span",{className:"social-icon",children:M.jsx(hl,{icon:PB})}),M.jsxs("span",{className:"link-copy",children:[M.jsx("strong",{children:"GitHub"}),M.jsx("small",{children:e==="en"?"OPEN PROFILE":"ОТКРЫТЬ ПРОФИЛЬ"})]}),M.jsx("span",{className:"link-arrow","aria-hidden":"true",children:"↗"})]}),M.jsxs(Wp,{href:"https://t.me/morgaev",target:"_blank",rel:"noopener noreferrer","aria-label":"Telegram",children:[M.jsx("span",{className:"social-icon",children:M.jsx(hl,{icon:BB})}),M.jsxs("span",{className:"link-copy",children:[M.jsx("strong",{children:"Telegram"}),M.jsx("small",{children:e==="en"?"SEND A MESSAGE":"НАПИСАТЬ"})]}),M.jsx("span",{className:"link-arrow","aria-hidden":"true",children:"↗"})]}),M.jsxs(Wp,{href:"https://vk.com/matteblackk",target:"_blank",rel:"noopener noreferrer","aria-label":"VK profile",children:[M.jsx("span",{className:"social-icon",children:M.jsx(hl,{icon:jB})}),M.jsxs("span",{className:"link-copy",children:[M.jsx("strong",{children:"VK"}),M.jsx("small",{children:e==="en"?"OPEN PROFILE":"ОТКРЫТЬ ПРОФИЛЬ"})]}),M.jsx("span",{className:"link-arrow","aria-hidden":"true",children:"↗"})]}),M.jsxs(WB,{children:[M.jsx("span",{className:"location-icon",children:M.jsx(hl,{icon:NB})}),M.jsxs("span",{className:"location-copy",children:[M.jsx("strong",{children:e==="en"?"Moscow, Russia":"Москва, Россия"}),M.jsx("small",{children:e==="en"?"BASED IN":"МОЯ ЛОКАЦИЯ"})]})]})]})})})]})}),M.jsx(ZB,{children:M.jsxs(KB,{children:[M.jsxs(QB,{children:["© ",t," Alexey Morgaev"]}),M.jsxs(JB,{children:[e==="en"?"Made with":"Сделано с",M.jsx("strong",{children:"React & TypeScript"}),M.jsx("span",{"aria-label":e==="en"?"care":"заботой",children:"♥"})]}),M.jsxs(tV,{href:"#home",children:[e==="en"?"BACK TO TOP":"НАВЕРХ",M.jsx("span",{"aria-hidden":"true",children:"↑"})]})]})})]})}const nV=()=>typeof window>"u"?"en":window.localStorage.getItem("language")==="ru"?"ru":"en";function iV({children:e}){const[t,n]=W.useState(nV),r=W.useCallback(c=>{n(c),window.localStorage.setItem("language",c)},[]),s=W.useCallback(()=>{n(c=>{const f=c==="en"?"ru":"en";return window.localStorage.setItem("language",f),f})},[]);W.useEffect(()=>{document.documentElement.lang=t},[t]);const l=W.useMemo(()=>({language:t,setLanguage:r,toggleLanguage:s}),[t,r,s]);return M.jsx(Vb.Provider,{value:l,children:e})}const rV=Q.div`
+`;function eV(){const{language:e}=qu(),t=new Date().getFullYear();return M.jsxs(UB,{id:"contacts",children:[M.jsx(FB,{children:M.jsxs(HB,{children:[M.jsx(Fr.div,{initial:{opacity:0,y:20},whileInView:{opacity:1,y:0},viewport:{once:!0},transition:{duration:.5},children:M.jsxs(YB,{children:["Contact Me",M.jsx(qB,{src:VB,alt:"","aria-hidden":"true"})]})}),M.jsx(Fr.div,{initial:{opacity:0,y:20},whileInView:{opacity:1,y:0},viewport:{once:!0},transition:{duration:.5,delay:.2},children:M.jsx(XB,{children:e==="en"?"I'm Always Open To New Projects And Opportunities. Let's Create Something Amazing Together!":"Я Всегда Открыт К Новым Проектам И Возможностям. Давайте Создадим Что-То Сильное Вместе!"})}),M.jsx(GB,{}),M.jsx(Fr.div,{initial:{opacity:0,y:20},whileInView:{opacity:1,y:0},viewport:{once:!0},transition:{duration:.5,delay:.4},children:M.jsx($B,{children:M.jsxs(IB,{children:[M.jsxs(Wp,{href:"https://github.com/matteblacck",target:"_blank",rel:"noopener noreferrer","aria-label":"GitHub profile",children:[M.jsx("span",{className:"social-icon",children:M.jsx(hl,{icon:PB})}),M.jsxs("span",{className:"link-copy",children:[M.jsx("strong",{children:"GitHub"}),M.jsx("small",{children:e==="en"?"OPEN PROFILE":"ОТКРЫТЬ ПРОФИЛЬ"})]}),M.jsx("span",{className:"link-arrow","aria-hidden":"true",children:"↗"})]}),M.jsxs(Wp,{href:"https://t.me/morgaev",target:"_blank",rel:"noopener noreferrer","aria-label":"Telegram",children:[M.jsx("span",{className:"social-icon",children:M.jsx(hl,{icon:BB})}),M.jsxs("span",{className:"link-copy",children:[M.jsx("strong",{children:"Telegram"}),M.jsx("small",{children:e==="en"?"SEND A MESSAGE":"НАПИСАТЬ"})]}),M.jsx("span",{className:"link-arrow","aria-hidden":"true",children:"↗"})]}),M.jsxs(Wp,{href:"https://vk.com/matteblackk",target:"_blank",rel:"noopener noreferrer","aria-label":"VK profile",children:[M.jsx("span",{className:"social-icon",children:M.jsx(hl,{icon:jB})}),M.jsxs("span",{className:"link-copy",children:[M.jsx("strong",{children:"VK"}),M.jsx("small",{children:e==="en"?"OPEN PROFILE":"ОТКРЫТЬ ПРОФИЛЬ"})]}),M.jsx("span",{className:"link-arrow","aria-hidden":"true",children:"↗"})]}),M.jsxs(WB,{children:[M.jsx("span",{className:"location-icon",children:M.jsx(hl,{icon:NB})}),M.jsxs("span",{className:"location-copy",children:[M.jsx("strong",{children:e==="en"?"Moscow, Russia":"Москва, Россия"}),M.jsx("small",{children:e==="en"?"BASED IN":"МОЯ ЛОКАЦИЯ"})]})]})]})})})]})}),M.jsx(ZB,{children:M.jsxs(KB,{children:[M.jsxs(QB,{children:["© ",t," Alexey Morgaev"]}),M.jsxs(JB,{children:[e==="en"?"Made with":"Сделано с",M.jsx("strong",{children:"React & TypeScript"})]}),M.jsxs(tV,{href:"#home",children:[e==="en"?"BACK TO TOP":"НАВЕРХ",M.jsx("span",{"aria-hidden":"true",children:M.jsx("svg",{viewBox:"0 0 24 24",fill:"none",children:M.jsx("path",{d:"M12 20V4M5.5 10.5 12 4l6.5 6.5",stroke:"currentColor",strokeWidth:"3.5",strokeLinecap:"round",strokeLinejoin:"round"})})})]})]})})]})}const nV=()=>typeof window>"u"?"en":window.localStorage.getItem("language")==="ru"?"ru":"en";function iV({children:e}){const[t,n]=W.useState(nV),r=W.useCallback(c=>{n(c),window.localStorage.setItem("language",c)},[]),s=W.useCallback(()=>{n(c=>{const f=c==="en"?"ru":"en";return window.localStorage.setItem("language",f),f})},[]);W.useEffect(()=>{document.documentElement.lang=t},[t]);const l=W.useMemo(()=>({language:t,setLanguage:r,toggleLanguage:s}),[t,r,s]);return M.jsx(Vb.Provider,{value:l,children:e})}const rV=Q.div`
   position: fixed;
   inset: 0;
   width: 100%;
