@@ -17,7 +17,7 @@
 
 ![Docker](https://img.shields.io/badge/DOCKER-2496ED?style=for-the-badge&logo=docker&logoColor=white) ![Nginx](https://img.shields.io/badge/NGINX-009639?style=for-the-badge&logo=nginx&logoColor=white) ![GitLab CI/CD](https://img.shields.io/badge/GITLAB_CI%2FCD-FC6D26?style=for-the-badge&logo=gitlab&logoColor=white) ![Production Deployment](https://img.shields.io/badge/PRODUCTION_DEPLOYMENT-333333?style=for-the-badge) ![Git](https://img.shields.io/badge/GIT-F05032?style=for-the-badge&logo=git&logoColor=white) ![GitHub](https://img.shields.io/badge/GITHUB-181717?style=for-the-badge&logo=github&logoColor=white) ![GitLab](https://img.shields.io/badge/GITLAB-FC6D26?style=for-the-badge&logo=gitlab&logoColor=white)
 
-### Contact
+### Contact me!
 
 [![Telegram](https://img.shields.io/badge/TELEGRAM-26A5E4?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/morgaev)
 [![Email](https://img.shields.io/badge/EMAIL-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:alexeymorgaevdev@gmail.com)
