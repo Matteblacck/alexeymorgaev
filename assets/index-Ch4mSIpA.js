@@ -1730,8 +1730,9 @@ void main() {
 
   @media (max-width: 520px) {
     position: sticky;
-    top: 64px;
-    width: 100%;
+    top: 12px;
+    box-sizing: border-box;
+    width: calc(100% - 32px);
     justify-content: space-between;
     gap: 1px;
   }
@@ -1770,8 +1771,9 @@ void main() {
   @media (max-width: 520px) {
     flex: 1 1 auto;
     min-width: 0;
-    padding: 9px 6px;
-    font-size: 10px;
+    padding: 9px 4px;
+    font-size: clamp(8px, 2.4vw, 10px);
+    letter-spacing: 0.05em;
     white-space: nowrap;
   }
 `,aN=I.button`
