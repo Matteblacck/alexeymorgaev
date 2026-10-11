@@ -1731,6 +1731,10 @@ void main() {
   background: var(--surface);
 
   @media (max-width: 520px) {
+    position: relative;
+    top: auto;
+    width: 100%;
+    justify-content: space-between;
     gap: 1px;
   }
 `,aN=I.button`
@@ -1766,8 +1770,11 @@ void main() {
   }
 
   @media (max-width: 520px) {
-    padding: 9px 10px;
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 9px 6px;
     font-size: 10px;
+    white-space: nowrap;
   }
 `,sN=I.button`
   position: fixed;
@@ -1797,6 +1804,13 @@ void main() {
     color: var(--highlited-text);
     transform: rotate(90deg);
     outline: none;
+  }
+
+  @media (max-width: 520px) {
+    top: 12px;
+    right: 12px;
+    width: 40px;
+    height: 40px;
   }
 
 `,oN=I(Gn.div)`
