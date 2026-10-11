@@ -22,4 +22,3 @@
 [![Telegram](https://img.shields.io/badge/TELEGRAM-26A5E4?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/morgaev)
 [![Email](https://img.shields.io/badge/EMAIL-D14836?style=for-the-badge&logo=gmail&logoColor=white)](mailto:alexeymorgaevdev@gmail.com)
 
-### [Check out my projects ↓](https://github.com/matteblacck?tab=repositories)
