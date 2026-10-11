@@ -81,9 +81,9 @@ const CompactSkillTag = styled.div`
   min-height: 29px;
   max-width: 100%;
   padding: 5px 8px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  border: 1px solid var(--surface-border);
   border-radius: 7px;
-  background: rgba(0, 0, 0, 0.24);
+  background: var(--surface);
   opacity: 0;
   transform: translate3d(0, 12px, 0) scale(0.97);
   transition:
@@ -197,7 +197,7 @@ const SkillTypeItem = styled.div<{ $align?: "left" | "right" }>`
     transform: translateY(-3px);
     border-color: var(--highlited-text);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--surface);
   }
 
   &::before {
@@ -443,7 +443,7 @@ export default function Skills() {
     { icon: techIcons.github, text: "GitHub" },
     { icon: techIcons.gitlab, text: "GitLab" },
     { icon: <VscVscode color="#007ACC" />, text: "VS Code" },
-    { icon: <TbRobot color="#B3C987" />, text: "Codex" },
+    { icon: <TbRobot color="var(--highlited-text)" />, text: "Codex" },
     { icon: <SiPostman color="#FF6C37" />, text: "Postman" },
     { icon: techIcons.english, text: "English B2" },
     { icon: techIcons.english, text: "Russian Native" },

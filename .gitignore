@@ -12,6 +12,10 @@ dist
 dist-ssr
 *.local
 
+# Local licensed font files; supply them separately when deploying.
+/src/assets/transfonter.org-20250321-122653/*.woff2
+/public/fonts/NeueMontreal-*.woff2
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

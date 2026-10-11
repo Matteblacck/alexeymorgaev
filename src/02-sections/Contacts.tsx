@@ -40,7 +40,7 @@ const Title = styled.h1`
   font-style: italic;
   text-transform: uppercase;
   letter-spacing: 2px;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+  text-shadow: 0 0 10px rgba(var(--text-rgb), 0.3);
   position: relative;
   text-align: left;
 `;
@@ -119,7 +119,7 @@ const SocialLink = styled.a`
   gap: 0.9rem;
   min-height: 92px;
   padding: 1rem 1.1rem;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+    border: 1px solid var(--surface-border);
   border-radius: 14px;
   background: transparent;
   backdrop-filter: blur(10px);
@@ -130,8 +130,8 @@ const SocialLink = styled.a`
   &:hover,
   &:focus-visible {
     transform: translateY(-3px);
-    border-color: rgba(255, 255, 255, 0.62);
-    background: rgba(255, 255, 255, 0.06);
+    border-color: var(--text);
+    background: var(--surface);
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
     outline: none;
   }
@@ -142,10 +142,10 @@ const SocialLink = styled.a`
     place-items: center;
     width: 44px;
     height: 44px;
-    border: 1px solid rgba(255, 255, 255, 0.14);
+    border: 1px solid var(--surface-border);
     border-radius: 11px;
-    background: rgba(0, 0, 0, 0.25);
-    color: #fff;
+    background: var(--surface);
+    color: var(--text);
     transition: transform 260ms ease, background 260ms ease, color 260ms ease;
   }
 
@@ -156,8 +156,8 @@ const SocialLink = styled.a`
   &:hover .social-icon,
   &:focus-visible .social-icon {
     transform: rotate(-7deg) scale(1.08);
-    background: #fff;
-    color: #000;
+    background: var(--highlited-text);
+    color: var(--button-text);
   }
 
   .link-copy {
@@ -193,7 +193,7 @@ const SocialLink = styled.a`
   &:hover .link-arrow,
   &:focus-visible .link-arrow {
     transform: translate(3px, -3px);
-    color: #fff;
+    color: var(--text);
     opacity: 1;
   }
 
@@ -210,7 +210,7 @@ const Location = styled.div`
   gap: 0.9rem;
   min-height: 92px;
   padding: 1rem 1.1rem;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+    border: 1px solid var(--surface-border);
   border-radius: 14px;
   background: transparent;
   backdrop-filter: blur(10px);
@@ -222,10 +222,10 @@ const Location = styled.div`
     place-items: center;
     width: 44px;
     height: 44px;
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    border: 1px solid var(--surface-border);
     border-radius: 11px;
-    background: rgba(255, 255, 255, 0.06);
-    color: #fff;
+    background: var(--surface);
+    color: var(--text);
     font-size: 20px;
   }
 
@@ -261,8 +261,8 @@ const Location = styled.div`
 const FooterBar = styled.footer`
   margin-top: clamp(1.25rem, 3vw, 2.5rem);
   padding: 1.4rem clamp(1.25rem, 5vw, 3.5rem);
-  border-top: 1px solid rgba(179, 201, 135, 0.36);
-  background: #000;
+  border-top: 1px solid rgba(var(--accent-rgb), 0.36);
+  background: var(--surface);
   box-shadow: 0 -18px 56px rgba(0, 0, 0, 0.12);
 
   @media (max-width: 420px) {

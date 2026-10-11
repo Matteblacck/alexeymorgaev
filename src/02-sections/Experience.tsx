@@ -4,7 +4,8 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import styled, { keyframes } from "styled-components";
 import { AnimatePresence, motion } from "framer-motion";
-import { TbClick, TbHandClick, TbX } from "react-icons/tb";
+import { LuMousePointerClick } from "react-icons/lu";
+import { TbX } from "react-icons/tb";
 import { fluidText } from "../05-shared/utils";
 import { techIcons } from "../05-shared/Icons";
 import { useLanguage } from "../05-shared/useLanguage";
@@ -77,6 +78,72 @@ type ExperienceItem = {
     label: string;
     items: string[];
   }[];
+};
+
+type ExperienceTrackId = "frontend" | "backend" | "devops";
+
+type ExperienceTrack = {
+  id: ExperienceTrackId;
+  title: string;
+  entries: {
+    projectIndex: number;
+    projectTitle?: string;
+    text: string | string[];
+  }[];
+  stack: string[];
+};
+
+const experienceTrackMatchers: Record<ExperienceTrackId, RegExp> = {
+  frontend: /front.?end|фронтенд|клиент/i,
+  backend: /back.?end|бэкенд|сервер/i,
+  devops: /dev.?ops|инфра|тест|ci\/?cd/i,
+};
+
+const getExperienceTracks = (experience: ExperienceItem): ExperienceTrack[] => {
+  const isFrontendRole = experienceTrackMatchers.frontend.test(experience.role);
+  const details = experience.projects.flatMap((project, projectIndex) =>
+    project.experience.map((item) => ({
+      ...item,
+      projectIndex,
+      projectTitle: experience.projects.length > 1 ? project.title : undefined,
+    })),
+  );
+  const unmatchedStack = experience.stack.filter(
+    (group) => !Object.values(experienceTrackMatchers).some((matcher) => matcher.test(group.label)),
+  );
+
+  return ([
+    { id: "frontend", title: "Frontend" },
+    { id: "backend", title: "Backend" },
+    { id: "devops", title: "DevOps" },
+  ] as const)
+    .map(({ id, title }) => {
+      const trackDetails = details.filter((item) => {
+        if (experienceTrackMatchers[id].test(item.title)) return true;
+        return id === "frontend" && isFrontendRole && /^(мой опыт|my experience)$/i.test(item.title);
+      });
+      const stackGroups = experience.stack.filter((group) => experienceTrackMatchers[id].test(group.label));
+      const extraFrontendGroups = id === "frontend" && isFrontendRole ? unmatchedStack : [];
+      const projectStack = id === "frontend" && isFrontendRole
+        ? experience.projects.flatMap((project) => project.stack ?? [])
+        : [];
+
+      return {
+        id,
+        title,
+        entries: trackDetails.map((item) => ({
+          projectIndex: item.projectIndex,
+          projectTitle: item.projectTitle,
+          text: item.text,
+        })),
+        stack: Array.from(new Set([
+          ...stackGroups.flatMap((group) => group.items),
+          ...extraFrontendGroups.flatMap((group) => group.items),
+          ...projectStack,
+        ])),
+      };
+    })
+    .filter((track) => track.entries.length > 0 || track.stack.length > 0);
 };
 
 const experiencesRu: ExperienceItem[] = [
@@ -714,7 +781,7 @@ const IdCardDecoration = styled(motion.img)`
   flex: 0 0 auto;
   margin-right: 0;
   rotate: -9deg;
-  filter: drop-shadow(0 16px 24px rgba(179, 201, 135, 0.12));
+  filter: drop-shadow(0 16px 24px rgba(var(--accent-rgb), 0.12));
   opacity: 0;
   translate: -32px 28px;
   scale: 0.82;
@@ -779,9 +846,9 @@ const ExperienceCard = styled(motion.button)<{ $index: number }>`
   gap: clamp(24px, 3vw, 48px);
   min-height: 250px;
   padding: clamp(24px, 3vw, 38px) clamp(24px, 3.4vw, 44px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--surface-border);
   border-radius: clamp(14px, 1.5vw, 20px);
-  background: #080907;
+  background: var(--surface);
   color: var(--text);
   text-align: left;
   position: relative;
@@ -809,8 +876,8 @@ const ExperienceCard = styled(motion.button)<{ $index: number }>`
     grid-column: 1 / -1;
     min-height: 0;
     padding: clamp(30px, 4.5vw, 58px);
-    border-color: rgba(179, 201, 135, 0.32);
-    background: #080907;
+    border-color: var(--surface-border);
+    background: var(--surface);
   }
 
   &[data-case-tier="featured"] h3 {
@@ -891,34 +958,13 @@ const ExperienceCard = styled(motion.button)<{ $index: number }>`
     animation: ${cardWave} 6s ease-in-out ${({ $index }) => 1200 + $index * 180}ms infinite;
   }
 
-  &::before {
-    content: "";
-    position: absolute;
-    top: clamp(16px, 1.5vw, 20px);
-    bottom: clamp(16px, 1.5vw, 20px);
-    left: 1px;
-    width: 2px;
-    border-radius: 999px;
-    background: var(--highlited-text);
-    opacity: 0.35;
-    transform: scaleY(0.42);
-    transform-origin: center;
-    transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
-  }
-
   &:hover,
   &:focus-visible {
     transition: border-color 0.3s ease, transform 0.3s ease, background-color 0.3s ease;
-    border-color: rgba(179, 201, 135, 0.62);
-    background: #080907;
+    border-color: rgba(var(--accent-rgb), 0.62);
+    background: var(--surface);
     transform: translateY(-4px) rotate(${({ $index }) => ($index % 2 === 0 ? "-1deg" : "1deg")});
     outline: none;
-  }
-
-  &:hover::before,
-  &:focus-visible::before {
-    opacity: 1;
-    transform: scaleY(1);
   }
 
   @media (max-width: 900px) {
@@ -936,20 +982,22 @@ const ExperienceCard = styled(motion.button)<{ $index: number }>`
     min-height: 0;
     gap: 16px;
     padding: 24px 22px;
-    background: #080907;
-    border-color: rgba(255, 255, 255, 0.12);
+    background: var(--surface);
+    border-color: var(--surface-border);
 
     &:hover,
     &:focus-visible {
-      background: #080907;
-      border-color: rgba(179, 201, 135, 0.34);
+      background: var(--surface);
+      border-color: rgba(var(--accent-rgb), 0.34);
       transform: none;
     }
 
-    &:hover::before,
-    &:focus-visible::before {
-      opacity: 0.35;
-      transform: scaleY(0.42);
+  }
+
+  @media (max-width: 400px) {
+    &[data-case-tier="featured"][data-language="ru"] h3 {
+      font-size: clamp(26px, 7.5vw, 30px);
+      letter-spacing: -0.035em;
     }
   }
 
@@ -1010,7 +1058,7 @@ const CardMetaLine = styled.div`
 const CardPeriod = styled.span`
   color: var(--text);
   font-size: ${fluidText(13, 11)};
-  font-weight: 500;
+  font-weight: 400;
   line-height: 1.2;
   opacity: 0.68;
   text-transform: uppercase;
@@ -1020,13 +1068,13 @@ const CardMetaDivider = styled.span`
   width: 1px;
   height: 12px;
   flex: 0 0 1px;
-  background: rgba(255, 255, 255, 0.28);
+  background: var(--surface-border);
 `;
 
 const CardDuration = styled.span`
   color: var(--highlited-text);
   font-size: ${fluidText(13, 11)};
-  font-weight: 600;
+  font-weight: 500;
   line-height: 1.2;
   opacity: 0.78;
 `;
@@ -1052,7 +1100,7 @@ const Company = styled.h3`
 const Role = styled.p`
   color: var(--highlited-text);
   font-size: ${fluidText(24, 18)};
-  font-weight: 500;
+  font-weight: 400;
   line-height: 1.15;
   margin-bottom: 14px;
 `;
@@ -1060,6 +1108,7 @@ const Role = styled.p`
 const Summary = styled.p`
   color: var(--text);
   font-size: ${fluidText(18, 15)};
+  font-weight: 400;
   line-height: 1.35;
   opacity: 0.78;
   max-width: 680px;
@@ -1068,16 +1117,17 @@ const Summary = styled.p`
 const ScaleMetrics = styled.div`
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: start;
   width: min(100%, 780px);
   margin-top: clamp(26px, 3.4vw, 40px);
-  padding-top: 18px;
-  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  padding-top: 24px;
+  border-top: 1px solid var(--surface-border);
 `;
 
 const ScaleMetric = styled.div`
   min-width: 0;
-  padding: 0 clamp(10px, 2.1vw, 28px);
-  border-right: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 0 clamp(8px, 1.4vw, 20px);
+  border-right: 1px solid var(--surface-border);
 
   &:first-child {
     padding-left: 0;
@@ -1093,7 +1143,7 @@ const MetricValue = styled.span`
   display: block;
   color: var(--highlited-text);
   font-size: clamp(34px, 5vw, 58px);
-  font-weight: 800;
+  font-weight: 500;
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.06em;
   line-height: 0.95;
@@ -1101,13 +1151,13 @@ const MetricValue = styled.span`
 
 const MetricLabel = styled.span`
   display: block;
-  max-width: 150px;
-  margin-top: 9px;
+  max-width: 100%;
+  margin-top: 14px;
   color: var(--text);
-  font-size: clamp(9px, 1vw, 11px);
-  font-weight: 700;
-  letter-spacing: 0.09em;
-  line-height: 1.35;
+  font-size: clamp(9px, 0.9vw, 10px);
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  line-height: 1.25;
   opacity: 0.58;
   text-transform: uppercase;
 `;
@@ -1125,7 +1175,7 @@ const CaseSignal = styled.span`
   gap: 8px;
   color: var(--text);
   font-size: 10px;
-  font-weight: 700;
+  font-weight: 500;
   letter-spacing: 0.09em;
   line-height: 1.3;
   opacity: 0.6;
@@ -1150,9 +1200,9 @@ const ContactBridge = styled.div`
   max-width: 1080px;
   margin: clamp(28px, 4vw, 48px) auto 0;
   padding: clamp(26px, 3.8vw, 46px);
-  border: 1px solid rgba(179, 201, 135, 0.28);
+  border: 1px solid rgba(var(--accent-rgb), 0.28);
   border-radius: clamp(14px, 1.5vw, 20px);
-  background: #080907;
+  background: var(--surface);
   overflow: hidden;
   opacity: 0;
   translate: 0 36px;
@@ -1177,7 +1227,7 @@ const ContactBridge = styled.div`
 
   @media (hover: hover) {
     &:hover {
-      border-color: rgba(179, 201, 135, 0.55);
+      border-color: rgba(var(--accent-rgb), 0.55);
     }
   }
 
@@ -1200,15 +1250,6 @@ const ContactBridgeCopy = styled.div`
   z-index: 1;
 `;
 
-const ContactBridgeEyebrow = styled.p`
-  margin-bottom: 10px;
-  color: var(--highlited-text);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-`;
-
 const ContactBridgeTitle = styled.h3`
   max-width: 700px;
   color: var(--text);
@@ -1228,28 +1269,46 @@ const ContactBridgeText = styled.p`
   opacity: 0.68;
 `;
 
+const ContactBridgeEmail = styled.a`
+  display: inline-block;
+  margin-top: 14px;
+  color: var(--highlited-text);
+  font-size: ${fluidText(16, 14)};
+  text-decoration: none;
+  text-underline-offset: 4px;
+
+  &:hover,
+  &:focus-visible {
+    text-decoration: underline;
+  }
+
+  &:focus-visible {
+    outline: 1px solid var(--highlited-text);
+    outline-offset: 4px;
+  }
+`;
+
 const ContactBridgeLink = styled.a`
   position: relative;
   z-index: 1;
+  justify-self: end;
+  align-self: end;
   display: inline-flex;
   align-items: center;
   justify-content: space-between;
-  gap: 20px;
-  min-width: 196px;
-  padding: 14px 16px;
-  border: 1px solid rgba(179, 201, 135, 0.55);
-  border-radius: 8px;
+  gap: 10px;
+  padding: 8px 0;
+  border: 0;
+  background: transparent;
   color: var(--highlited-text);
   font-size: 12px;
-  font-weight: 800;
+  font-weight: 600;
   letter-spacing: 0.1em;
   line-height: 1;
   text-decoration: none;
   text-transform: uppercase;
   transition:
     color 250ms ease,
-    background-color 250ms ease,
-    border-color 250ms ease,
     transform 250ms ease;
 
   span:last-child {
@@ -1258,23 +1317,21 @@ const ContactBridgeLink = styled.a`
     transition: transform 250ms ease;
   }
 
-  &:hover,
   &:focus-visible {
-    border-color: var(--highlited-text);
-    background: var(--highlited-text);
-    color: #080907;
+    color: var(--text);
     transform: translateY(-2px);
     outline: none;
+    text-decoration: underline;
+    text-underline-offset: 5px;
   }
 
-  &:hover span:last-child,
   &:focus-visible span:last-child {
     transform: translate(3px, -3px);
   }
 
   @media (max-width: 700px) {
     width: fit-content;
-    min-width: min(100%, 196px);
+    justify-self: end;
   }
 `;
 
@@ -1283,27 +1340,84 @@ const Tags = styled.div`
   flex-wrap: wrap;
   gap: 8px;
   margin-top: 22px;
+
+  &.card-tags {
+    gap: 8px 16px;
+    margin-top: 20px;
+  }
+
+  &.modal-tags {
+    gap: 8px 10px;
+    margin-top: 0;
+  }
+
+  &.card-tags > span {
+    min-height: 0;
+    padding: 2px 0;
+    border: 0;
+    border-radius: 0;
+    font-size: 11px;
+    opacity: 0.72;
+  }
+
+  &.modal-tags > span {
+    background: rgba(255, 255, 255, 0.018);
+    font-size: 13px;
+    transition: border-color 0.22s ease, color 0.22s ease, transform 0.22s ease, background 0.22s ease;
+  }
+
+  &.modal-tags > span:hover {
+    border-color: rgba(var(--accent-rgb), 0.48);
+    background: rgba(var(--accent-rgb), 0.09);
+    color: var(--highlited-text);
+    transform: translateY(-2px);
+  }
 `;
 
 const CardAction = styled.span`
+  position: relative;
   display: inline-flex;
   align-items: center;
-  gap: 9px;
+  gap: 4px;
   margin-top: 22px;
-  padding: 7px 11px;
-  border: 1px solid rgba(179, 201, 135, 0.38);
-  border-radius: 999px;
+  padding: 4px 0;
   color: var(--highlited-text);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
   line-height: 1;
   text-transform: uppercase;
-  transition: background-color 0.25s ease, border-color 0.25s ease;
+  opacity: 0.82;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+
+  &::after {
+    position: absolute;
+    right: 20px;
+    bottom: 0;
+    left: 0;
+    height: 1px;
+    background: currentColor;
+    content: "";
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.25s ease;
+  }
 
   ${ExperienceCard}:hover &, ${ExperienceCard}:focus-visible & {
-    background-color: rgba(179, 201, 135, 0.1);
-    border-color: rgba(179, 201, 135, 0.72);
+    opacity: 1;
+    transform: translateY(-1px);
+
+    &::after {
+      transform: scaleX(1);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+
+    &::after {
+      transition: none;
+    }
   }
 `;
 
@@ -1312,8 +1426,13 @@ const CardActionIcon = styled.span`
   align-items: center;
   justify-content: center;
   flex: 0 0 auto;
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
+  transition: transform 0.25s ease;
+
+  ${ExperienceCard}:hover &, ${ExperienceCard}:focus-visible & {
+    transform: scale(1.12);
+  }
 
   svg {
     display: block;
@@ -1322,18 +1441,8 @@ const CardActionIcon = styled.span`
     stroke-width: 1.8;
   }
 
-  .tap-icon {
-    display: none;
-  }
-
-  @media (max-width: 768px) {
-    .click-icon {
-      display: none;
-    }
-
-    .tap-icon {
-      display: block;
-    }
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
   }
 `;
 
@@ -1343,11 +1452,11 @@ const Tag = styled.span`
   gap: 7px;
   min-height: 30px;
   padding: 5px 10px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 1px solid var(--surface-border);
   border-radius: 8px;
   color: var(--text);
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: 0;
   text-transform: uppercase;
   opacity: 0.86;
@@ -1379,80 +1488,175 @@ const ModalOverlay = styled(motion.div)`
   position: fixed;
   inset: 0;
   z-index: 1200;
-  width: 100vw;
-  height: 100vh;
-  height: 100dvh;
-  background: rgba(0, 0, 0, 0.86);
-  backdrop-filter: blur(12px);
-  overflow: hidden;
-`;
-
-const ModalContainer = styled(motion.div)`
-  height: 100%;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
   width: 100%;
-  padding: 28px;
-  color: var(--text);
+  height: 100%;
+  height: 100dvh;
+  padding: clamp(10px, 1.6vw, 22px);
+  background: transparent;
   overflow-x: hidden;
   overflow-y: auto;
   overscroll-behavior: contain;
-  scrollbar-width: none;
 
-  &::-webkit-scrollbar {
-    display: none;
-  }
-
-  @media (max-width: 640px) {
-    padding: 18px;
+  &::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background: var(--modal-backdrop);
+    backdrop-filter: blur(12px);
+    pointer-events: none;
   }
 `;
 
-const ModalHeader = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 20px;
-  padding-bottom: 28px;
+const ModalContainer = styled(motion.div)`
+  position: relative;
+  z-index: 1;
+  isolation: isolate;
+  flex: 0 0 auto;
+  width: min(100%, 1480px);
+  min-height: calc(100dvh - clamp(20px, 4.4vw, 60px));
+  margin: auto;
+  padding: clamp(24px, 3.2vw, 46px);
+  border: 1px solid var(--surface-border);
+  border-radius: clamp(14px, 1.8vw, 24px);
+  background: var(--surface);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.38);
+  color: var(--text);
+  overflow: visible;
+
+  @media (max-width: 860px) {
+    padding: clamp(24px, 5vw, 42px);
+  }
+
+  @media (max-width: 520px) {
+    min-height: calc(100dvh - 20px);
+    padding: 24px 18px 32px;
+    border-radius: 18px;
+  }
+`;
+
+const ModalHeader = styled(motion.div)`
+  display: block;
+  padding-bottom: clamp(18px, 2.2vw, 28px);
+  scroll-margin-top: 90px;
 
   > div {
     min-width: 0;
   }
 
   @media (max-width: 520px) {
-    position: relative;
-    padding-right: 58px;
+    > div {
+      padding-right: 48px;
+    }
   }
 `;
 
 const ModalEyebrow = styled.p`
   color: var(--highlited-text);
-  font-size: ${fluidText(18, 14)};
-  font-weight: 600;
+  font-size: ${fluidText(14, 12)};
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  margin-bottom: 10px;
   text-transform: uppercase;
 `;
 
 const ModalTitle = styled.h3`
-  max-width: 900px;
-  font-size: ${fluidText(88, 40)};
-  font-weight: 700;
-  line-height: 0.92;
+  max-width: 1200px;
+  font-size: clamp(36px, 4.2vw, 64px);
+  font-weight: 600;
+  letter-spacing: -0.045em;
+  line-height: 1.04;
   text-transform: uppercase;
   overflow-wrap: anywhere;
   word-break: normal;
   hyphens: auto;
 
   @media (max-width: 520px) {
-    font-size: clamp(2rem, 10vw, 2.5rem);
+    font-size: clamp(26px, 7vw, 34px);
+  }
+`;
+
+const ModalNav = styled.nav`
+  grid-area: nav;
+  position: sticky;
+  top: 10px;
+  z-index: 6;
+  display: flex;
+  width: fit-content;
+  gap: 3px;
+  margin: 0;
+  padding: 4px;
+  border: 1px solid var(--surface-border);
+  border-radius: 8px;
+  background: var(--surface);
+
+  @media (max-width: 520px) {
+    position: sticky;
+    top: 12px;
+    box-sizing: border-box;
+    width: calc(100% - 32px);
+    justify-content: space-between;
+    gap: 1px;
+  }
+`;
+
+const ModalNavLink = styled.button`
+  position: relative;
+  padding: 9px 13px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--text);
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.07em;
+  opacity: 0.62;
+  text-transform: uppercase;
+  transition: color 0.25s ease, opacity 0.25s ease, background 0.25s ease;
+
+  &[data-active="true"] {
+    color: var(--highlited-text);
+    opacity: 1;
+  }
+
+  &:hover,
+  &:focus-visible {
+    color: var(--highlited-text);
+    opacity: 1;
+  }
+
+  &:focus-visible {
+    outline: 1px solid var(--highlited-text);
+    outline-offset: 3px;
+  }
+
+  @media (max-width: 520px) {
+    flex: 1 1 auto;
+    min-width: 0;
+    padding: 9px 4px;
+    font-size: clamp(8px, 2.4vw, 10px);
+    letter-spacing: 0.05em;
+    white-space: nowrap;
   }
 `;
 
 const CloseButton = styled.button`
+  position: fixed;
+  top: clamp(16px, 2.4vw, 32px);
+  right: clamp(16px, 2.4vw, 32px);
+  z-index: 20;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   flex: 0 0 auto;
   width: 44px;
   height: 44px;
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  border: 1px solid var(--surface-border);
   border-radius: 8px;
   background: transparent;
   color: var(--text);
@@ -1472,47 +1676,64 @@ const CloseButton = styled.button`
   }
 
   @media (max-width: 520px) {
-    position: absolute;
-    top: 0;
-    right: 0;
+    top: 12px;
+    right: 12px;
+    width: 40px;
+    height: 40px;
   }
+
 `;
 
-const ModalGrid = styled.div`
+const ModalGrid = styled(motion.div)`
   display: grid;
-  grid-template-columns: minmax(220px, 0.32fr) minmax(0, 1fr);
-  gap: 28px;
+  grid-template-areas:
+    "nav nav"
+    "meta content";
+  grid-template-columns: minmax(220px, 0.3fr) minmax(0, 1fr);
+  gap: clamp(18px, 2.4vw, 34px);
 
   @media (max-width: 860px) {
+    grid-template-areas:
+      "meta"
+      "nav"
+      "content";
     grid-template-columns: 1fr;
   }
 `;
 
-const MetaPanel = styled.aside`
+const MetaPanel = styled(motion.aside)`
+  grid-area: meta;
   position: sticky;
-  top: 28px;
+  top: 78px;
   align-self: start;
   display: flex;
   flex-direction: column;
-  gap: 18px;
-  padding: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.04);
+  gap: 20px;
+  padding: clamp(16px, 1.7vw, 22px);
+  border: 1px solid var(--surface-border);
+  border-radius: 12px;
+  background: #0c0d0c;
 
   @media (max-width: 860px) {
-    position: static;
+    position: relative;
+    top: auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
   }
 `;
 
 const MetaItem = styled.div`
+  min-width: 0;
+
   > span {
     display: block;
-    color: var(--highlited-text);
-    font-size: 12px;
-    font-weight: 600;
+    color: var(--text);
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0.12em;
     text-transform: uppercase;
-    margin-bottom: 4px;
+    margin-bottom: 8px;
+    opacity: 0.5;
   }
 
   p {
@@ -1521,102 +1742,228 @@ const MetaItem = styled.div`
     flex-wrap: wrap;
     gap: 0 7px;
     color: var(--text);
-    font-size: ${fluidText(20, 16)};
-    font-weight: 500;
+    font-size: clamp(15px, 1.05vw, 17px);
+    font-weight: 400;
     line-height: 1.2;
     margin: 0;
+    overflow-wrap: anywhere;
+    transition: color 0.2s ease;
   }
 
   p span {
     color: var(--highlited-text);
-    font-size: 0.72em;
-    font-weight: 600;
+    font-size: 0.78em;
+    font-weight: 400;
     opacity: 0.78;
   }
-`;
 
-const ModalContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 28px;
-`;
-
-const Block = styled.section`
-  padding: 28px;
-  border-left: 3px solid var(--highlited-text);
-  background: rgba(255, 255, 255, 0.04);
-  border-radius: 0 8px 8px 0;
-
-  @media (max-width: 640px) {
-    padding: 22px;
+  &:hover p {
+    color: var(--highlited-text);
   }
 `;
 
-const BlockTitle = styled.h4`
-  font-size: ${fluidText(30, 22)};
-  font-weight: 700;
-  line-height: 1.05;
-  margin-bottom: 14px;
+const ModalContent = styled(motion.div)`
+  grid-area: content;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  gap: 18px;
+`;
+
+const OverviewPanel = styled(motion.section)`
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 20px;
+  padding: 8px 0 24px;
+  border-bottom: 1px solid var(--surface-border);
+  scroll-margin-top: 82px;
+
+  @media (max-width: 700px) {
+    gap: 16px;
+  }
+`;
+
+const OverviewCopy = styled.div`
+  min-width: 0;
+`;
+
+const SectionEyebrow = styled.p`
+  color: var(--highlited-text);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  margin-bottom: 12px;
   text-transform: uppercase;
 `;
 
-const BlockText = styled.p`
-  font-size: ${fluidText(21, 16)};
-  line-height: 1.45;
-  opacity: 0.84;
+const OverviewSummary = styled.p`
+  max-width: 1000px;
+  color: var(--text);
+  font-size: clamp(17px, 1.3vw, 20px);
+  font-weight: 400;
+  line-height: 1.42;
+  margin: 0;
+  opacity: 0.86;
 `;
 
-const ExperienceDetails = styled.div`
+const HighlightList = styled.ol`
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: clamp(20px, 3vw, 42px);
+  gap: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  @media (max-width: 700px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+const HighlightItem = styled.li`
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr);
+  gap: 10px;
+  padding: 10px 0;
+  border-top: 1px solid var(--surface-border);
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.4;
+  opacity: 0.78;
+  transition: color 0.2s ease, opacity 0.2s ease;
+
+  > span:first-child {
+    color: var(--highlited-text);
+    font-size: 10px;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.06em;
+    opacity: 0.82;
+  }
+
+  &:hover {
+    color: var(--text);
+    opacity: 1;
+  }
+`;
+
+const TrackSection = styled(motion.section)`
   display: grid;
   gap: 18px;
-  margin-top: 22px;
+  padding: clamp(20px, 2.4vw, 30px) 0;
+  border-bottom: 1px solid var(--surface-border);
+  scroll-margin-top: 82px;
+
+  &:last-child {
+    border-bottom: 0;
+  }
+
+  @media (max-width: 640px) {
+    gap: 14px;
+    padding: 20px 0;
+  }
 `;
 
-const ExperienceDetail = styled.div`
-  padding-top: 18px;
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
-`;
-
-const ExperienceDetailTitle = styled.h5`
-  color: var(--highlited-text);
-  font-size: ${fluidText(22, 18)};
-  font-weight: 700;
-  line-height: 1.1;
-  margin-bottom: 10px;
+const TrackTitle = styled.h4`
+  color: var(--text);
+  font-size: clamp(17px, 1.4vw, 20px);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  margin: 0;
   text-transform: uppercase;
 `;
 
-const ParagraphGroup = styled.div`
+const TrackTextGroup = styled.div`
   display: grid;
-  gap: 14px;
+  gap: 12px;
+
+  & + & {
+    padding-top: 16px;
+    border-top: 1px solid var(--surface-border);
+  }
 `;
 
-const StackGroup = styled.div`
-  display: grid;
-  gap: 16px;
-`;
-
-const StackTitle = styled.p`
-  color: var(--highlited-text);
+const TrackEntryTitle = styled.h5`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 8px;
+  margin: 0 0 2px;
+  color: var(--text);
   font-size: 13px;
-  font-weight: 700;
-  text-transform: uppercase;
-  margin-bottom: 10px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+
+  span:first-child {
+    color: var(--highlited-text);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+`;
+
+const TrackText = styled.p`
+  max-width: 1050px;
+  margin: 0;
+  color: var(--text);
+  font-size: clamp(16px, 1.25vw, 20px);
+  font-weight: 400;
+  line-height: 1.55;
+  opacity: 0.84;
 `;
 
 const modalVariants = {
   hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { duration: 0.35 } },
-  exit: { opacity: 0, transition: { duration: 0.25 } },
+  visible: {
+    opacity: 1,
+    transition: { duration: 0.42, ease: [0.16, 1, 0.3, 1] },
+  },
+  exit: {
+    opacity: 0,
+    transition: { duration: 0.28, ease: [0.4, 0, 1, 1] },
+  },
 };
 
 const contentVariants = {
-  hidden: { opacity: 0 },
+  hidden: { opacity: 0, y: 34, scale: 0.965, filter: "blur(10px)" },
   visible: {
     opacity: 1,
-    transition: { duration: 0.25, ease: [0.4, 0, 0.2, 1] },
+    y: 0,
+    scale: 1,
+    filter: "blur(0px)",
+    transition: {
+      duration: 0.7,
+      ease: [0.16, 1, 0.3, 1],
+      delayChildren: 0.1,
+      staggerChildren: 0.12,
+    },
   },
-  exit: { opacity: 0, transition: { duration: 0.2 } },
+  exit: {
+    opacity: 0,
+    y: 20,
+    scale: 0.99,
+    filter: "blur(5px)",
+    transition: { duration: 0.25, ease: [0.4, 0, 1, 1] },
+  },
+};
+
+const modalItemVariants = {
+  hidden: { opacity: 0, y: 22, filter: "blur(5px)" },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
+  },
+};
+
+const modalStaggerVariants = {
+  hidden: { opacity: 1 },
+  visible: {
+    opacity: 1,
+    transition: { staggerChildren: 0.1, delayChildren: 0.06 },
+  },
 };
 
 export default function Experience() {
@@ -1629,7 +1976,22 @@ export default function Experience() {
   const [reverseMarquee, setReverseMarquee] = useState(false);
   const [selectedExperience, setSelectedExperience] =
     useState<ExperienceItem | null>(null);
+  const modalOverlayRef = useRef<HTMLDivElement>(null);
+  const [activeModalSection, setActiveModalSection] = useState("overview");
   const marqueeText = "WORK EXPERIENCE ";
+  const modalTracks = selectedExperience ? getExperienceTracks(selectedExperience) : [];
+
+  const navigateModal = (section: string) => {
+    setActiveModalSection(section);
+    modalOverlayRef.current
+      ?.querySelector<HTMLElement>(`[data-modal-section="${section}"]`)
+      ?.scrollIntoView({
+        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+          ? "auto"
+          : "smooth",
+        block: "start",
+      });
+  };
 
   useEffect(() => {
     const revealSection = revealOnScroll(sectionRef.current, [
@@ -1875,6 +2237,38 @@ export default function Experience() {
     };
   }, [selectedExperience]);
 
+  useEffect(() => {
+    if (!selectedExperience) return;
+
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setSelectedExperience(null);
+    };
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [selectedExperience]);
+
+  useEffect(() => {
+    const overlay = modalOverlayRef.current;
+    if (!selectedExperience || !overlay) return;
+
+    const sections = Array.from(
+      overlay.querySelectorAll<HTMLElement>("[data-modal-section]"),
+    );
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const current = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        const section = current?.target.getAttribute("data-modal-section");
+        if (section) setActiveModalSection(section);
+      },
+      { root: overlay, rootMargin: "-18% 0px -68% 0px", threshold: [0, 0.1, 0.3] },
+    );
+
+    sections.forEach((section) => observer.observe(section));
+    return () => observer.disconnect();
+  }, [selectedExperience]);
+
   return (
     <>
       <SectionContainer ref={sectionRef} id="experience">
@@ -1918,7 +2312,10 @@ export default function Experience() {
                   index === 0 ? "featured" : index === 1 ? "secondary" : "compact"
                 }
                 type="button"
-                onClick={() => setSelectedExperience(experience)}
+                onClick={() => {
+                  setActiveModalSection("overview");
+                  setSelectedExperience(experience);
+                }}
               >
                 <CardMain className={index === 0 ? "featured-main" : undefined}>
                   <CardMetaLine className="card-meta-line">
@@ -1967,7 +2364,7 @@ export default function Experience() {
                       ).map((signal) => <CaseSignal key={signal}>{signal}</CaseSignal>)}
                     </CaseSignals>
                   )}
-                  <Tags className={index === 0 ? "featured-tags" : undefined}>
+                  <Tags className={index === 0 ? "card-tags featured-tags" : "card-tags"}>
                     {getCardTechnologies(experience, index).map((item) => (
                       <TechnologyTag key={item} name={item} />
                     ))}
@@ -1975,8 +2372,7 @@ export default function Experience() {
                   <CardAction className={index === 0 ? "featured-action" : undefined}>
                     {language === "en" ? "View details" : "Подробнее"}
                     <CardActionIcon aria-hidden="true">
-                      <TbClick className="click-icon" />
-                      <TbHandClick className="tap-icon" />
+                      <LuMousePointerClick />
                     </CardActionIcon>
                   </CardAction>
                 </CardMain>
@@ -1989,17 +2385,17 @@ export default function Experience() {
 
           <ContactBridge className="experience-hidden">
             <ContactBridgeCopy>
-              <ContactBridgeEyebrow>
-                {language === "en" ? "NEXT CHALLENGE" : "СЛЕДУЮЩАЯ ЗАДАЧА"}
-              </ContactBridgeEyebrow>
               <ContactBridgeTitle>
                 {language === "en" ? "Your idea" : "Ваша идея"}
               </ContactBridgeTitle>
               <ContactBridgeText>
                 {language === "en"
                   ? "I'll build it from interface and backend to integrations and production."
-                  : "Реализую её целиком: от интерфейса и backend до интеграций и запуска в production."}
+                  : "Реализую вашу идею целиком: от интерфейса и серверной части до интеграций и запуска."}
               </ContactBridgeText>
+              <ContactBridgeEmail href="mailto:alexeymorgaevdev@gmail.com">
+                alexeymorgaevdev@gmail.com
+              </ContactBridgeEmail>
             </ContactBridgeCopy>
             <ContactBridgeLink
               href="#contacts"
@@ -2016,116 +2412,149 @@ export default function Experience() {
         </Container>
       </SectionContainer>
 
-      <AnimatePresence mode="wait">
-        {selectedExperience && (
-          <ModalOverlay
-            variants={modalVariants}
-            initial="hidden"
-            animate="visible"
-            exit="exit"
-          >
-            <ModalContainer
-              data-lenis-prevent
-              variants={contentVariants}
+      {typeof document !== "undefined" && createPortal(
+        <AnimatePresence mode="wait">
+          {selectedExperience && (
+            <ModalOverlay
+              ref={modalOverlayRef}
+              variants={modalVariants}
               initial="hidden"
               animate="visible"
               exit="exit"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="experience-modal-title"
+              onClick={() => setSelectedExperience(null)}
             >
-              <ModalHeader>
-                <div>
-                  <ModalEyebrow>{selectedExperience.role}</ModalEyebrow>
-                  <ModalTitle>{selectedExperience.company}</ModalTitle>
-                </div>
-                <CloseButton
-                  type="button"
-                  onClick={() => setSelectedExperience(null)}
-                  aria-label={language === "en" ? "Close experience" : "Закрыть опыт"}
-                >
-                  <TbX />
-                </CloseButton>
-              </ModalHeader>
+              <CloseButton
+                type="button"
+                onClick={() => setSelectedExperience(null)}
+                aria-label={language === "en" ? "Close experience" : "Закрыть опыт"}
+              >
+                <TbX />
+              </CloseButton>
+              <ModalContainer
+                data-lenis-prevent
+                onClick={(event) => event.stopPropagation()}
+                variants={contentVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+              >
+                <ModalHeader variants={modalItemVariants}>
+                  <div>
+                    <ModalEyebrow>{selectedExperience.role}</ModalEyebrow>
+                    <ModalTitle id="experience-modal-title">
+                      {selectedExperience.company}
+                    </ModalTitle>
+                  </div>
+                </ModalHeader>
 
-              <ModalGrid>
-                <MetaPanel>
-                  <MetaItem>
-                    <span>{language === "en" ? "Period" : "Период"}</span>
-                    <p>
-                      {selectedExperience.period}
-                      <span>
-                        · {formatExperienceDuration(selectedExperience.durationMonths, language)}
-                      </span>
-                    </p>
-                  </MetaItem>
-                  {selectedExperience.location && (
-                    <MetaItem>
-                      <span>{language === "en" ? "Location" : "Локация"}</span>
-                      <p>{selectedExperience.location}</p>
-                    </MetaItem>
-                  )}
-                  {selectedExperience.domain && (
-                    <MetaItem>
-                      <span>{language === "en" ? "Domain" : "Сфера"}</span>
-                      <p>{selectedExperience.domain}</p>
-                    </MetaItem>
-                  )}
-                </MetaPanel>
+                <ModalGrid variants={modalStaggerVariants}>
+                  <ModalNav aria-label={language === "en" ? "Experience sections" : "Разделы опыта"}>
+                    {[
+                      { id: "overview", label: language === "en" ? "Overview" : "Обзор" },
+                      ...modalTracks.map((track) => ({ id: track.id, label: track.title })),
+                    ].map((item) => (
+                      <ModalNavLink
+                        key={item.id}
+                        type="button"
+                        data-active={activeModalSection === item.id}
+                        aria-current={activeModalSection === item.id ? "location" : undefined}
+                        onClick={() => navigateModal(item.id)}
+                      >
+                        {item.label}
+                      </ModalNavLink>
+                    ))}
+                  </ModalNav>
 
-                <ModalContent>
-                  {selectedExperience.projects.map((project) => (
-                    <Block key={project.title}>
-                      <BlockTitle>{project.title}</BlockTitle>
-                      <BlockText>{project.brief}</BlockText>
-                      <ExperienceDetails>
-                        {project.experience.map((item) => (
-                          <ExperienceDetail key={item.title}>
-                            <ExperienceDetailTitle>
-                              {item.title}
-                            </ExperienceDetailTitle>
-                            {Array.isArray(item.text) ? (
-                              <ParagraphGroup>
-                                {item.text.map((paragraph) => (
-                                  <BlockText key={paragraph}>
-                                    {paragraph}
-                                  </BlockText>
-                                ))}
-                              </ParagraphGroup>
-                            ) : (
-                              <BlockText>{item.text}</BlockText>
-                            )}
-                          </ExperienceDetail>
-                        ))}
-                      </ExperienceDetails>
-                      {project.stack && (
-                        <Tags>
-                          {project.stack.map((item) => (
-                            <TechnologyTag key={item} name={item} />
+                  <MetaPanel variants={modalItemVariants}>
+                    <MetaItem>
+                      <span>{language === "en" ? "Period" : "Период"}</span>
+                      <p>
+                        {selectedExperience.period}
+                        <span>
+                          · {formatExperienceDuration(selectedExperience.durationMonths, language)}
+                        </span>
+                      </p>
+                    </MetaItem>
+                    {selectedExperience.location && (
+                      <MetaItem>
+                        <span>{language === "en" ? "Location" : "Локация"}</span>
+                        <p>{selectedExperience.location}</p>
+                      </MetaItem>
+                    )}
+                    {selectedExperience.domain && (
+                      <MetaItem>
+                        <span>{language === "en" ? "Domain" : "Сфера"}</span>
+                        <p>{selectedExperience.domain}</p>
+                      </MetaItem>
+                    )}
+                  </MetaPanel>
+
+                  <ModalContent variants={modalStaggerVariants}>
+                    <OverviewPanel
+                      data-modal-section="overview"
+                      variants={modalItemVariants}
+                    >
+                      <OverviewCopy>
+                        <SectionEyebrow>{language === "en" ? "Context" : "Контекст"}</SectionEyebrow>
+                        <OverviewSummary>{selectedExperience.summary}</OverviewSummary>
+                      </OverviewCopy>
+                      <div>
+                        <SectionEyebrow>{language === "en" ? "What I delivered" : "Что реализовано"}</SectionEyebrow>
+                        <HighlightList>
+                          {selectedExperience.highlights.map((highlight, index) => (
+                            <HighlightItem key={highlight}>
+                              <span>{String(index + 1).padStart(2, "0")}</span>
+                              <span>{highlight}</span>
+                            </HighlightItem>
                           ))}
-                        </Tags>
-                      )}
-                    </Block>
-                  ))}
+                        </HighlightList>
+                      </div>
+                    </OverviewPanel>
 
-                  <Block>
-                    <BlockTitle>Stack</BlockTitle>
-                    <StackGroup>
-                      {selectedExperience.stack.map((group) => (
-                        <div key={group.label}>
-                          <StackTitle>{group.label}</StackTitle>
-                          <Tags>
-                            {group.items.map((item) => (
-                              <TechnologyTag key={item} name={item} />
+                    {modalTracks.map((track) => (
+                      <TrackSection
+                        key={track.id}
+                        data-modal-section={track.id}
+                        variants={modalItemVariants}
+                      >
+                        <TrackTitle>{track.title}</TrackTitle>
+                        {track.entries.length > 0 && (
+                          <div>
+                            {track.entries.map((entry, entryIndex) => (
+                              <TrackTextGroup key={`${track.id}-${entry.projectIndex}-${entryIndex}`}>
+                                {entry.projectTitle && (
+                                  <TrackEntryTitle>
+                                    <span>
+                                      {language === "en" ? "Project" : "Проект"} {String(entry.projectIndex + 1).padStart(2, "0")}
+                                    </span>
+                                    <span>{entry.projectTitle}</span>
+                                  </TrackEntryTitle>
+                                )}
+                                {Array.isArray(entry.text)
+                                  ? entry.text.map((paragraph) => <TrackText key={paragraph}>{paragraph}</TrackText>)
+                                  : <TrackText>{entry.text}</TrackText>}
+                              </TrackTextGroup>
                             ))}
+                          </div>
+                        )}
+                        {track.stack.length > 0 && (
+                          <Tags className="modal-tags">
+                            {track.stack.map((item) => <TechnologyTag key={item} name={item} />)}
                           </Tags>
-                        </div>
-                      ))}
-                    </StackGroup>
-                  </Block>
-                </ModalContent>
-              </ModalGrid>
-            </ModalContainer>
-          </ModalOverlay>
-        )}
-      </AnimatePresence>
+                        )}
+                      </TrackSection>
+                    ))}
+                  </ModalContent>
+                </ModalGrid>
+              </ModalContainer>
+            </ModalOverlay>
+          )}
+        </AnimatePresence>,
+        document.body,
+      )}
       {typeof document !== "undefined" && createPortal(
         <IdCardDecoration
           ref={idCardRef}

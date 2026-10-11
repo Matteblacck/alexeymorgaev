@@ -10,7 +10,7 @@ const ModalOverlay = styled(motion.div)`
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.8);
+  background: var(--modal-backdrop);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -98,7 +98,7 @@ const Description = styled(motion.div)`
   font-weight: 600;
   font-size: ${fluidText(30, 18)};
   padding: 3rem;
-  background: rgba(0, 0, 0, 0.5);
+  background: var(--surface);
   backdrop-filter: blur(10px);
   position: relative;
   z-index: 20;
@@ -125,7 +125,7 @@ const DownBar = styled(motion.div)`
   padding: 12px 5vw;
   font-weight: 600;
   font-size: ${fluidText(16,14)};
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 1px solid var(--surface-border);
   position: fixed;
   bottom: 0;
   left: 0;

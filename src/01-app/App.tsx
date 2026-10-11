@@ -25,6 +25,14 @@ const Background = styled.div`
   height: 100lvh;
   z-index: 0;
   pointer-events: none;
+  filter: hue-rotate(var(--ray-hue-shift, 0deg));
+  opacity: var(--ray-opacity, 1);
+  transition: filter 420ms ease, opacity 420ms ease;
+`;
+
+const MainContent = styled.main`
+  position: relative;
+  z-index: 1;
 `;
 
 const Rays = styled.div`
@@ -148,13 +156,13 @@ function App() {
         <Header />
       </header>
 
-      <main ref={mainRef}>
+      <MainContent ref={mainRef}>
         <Home />
         <About />
         <Skills />
         <Experience />
         <Contacts />
-      </main>
+      </MainContent>
     </LanguageProvider>
   );
 }

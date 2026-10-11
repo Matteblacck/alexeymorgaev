@@ -7,6 +7,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { fluidText } from "../05-shared/utils";
 import { useLanguage } from "../05-shared/useLanguage";
 import { scrollToElement } from "../05-shared/smoothScroll";
+import ThemeControls from "../05-shared/ThemeControls";
 
 const star1Src = `${import.meta.env.BASE_URL}images/star1.webp`;
 const star2Src = `${import.meta.env.BASE_URL}images/star2.webp`;
@@ -231,12 +232,23 @@ const HeroContent = styled.div`
 
   @media (max-width: 767px) {
     --hero-text-gap: clamp(8px, 1.5vh, 12px);
-    transform: translateY(4vh);
+    transform: translateY(4.4vh);
+
+    & > div:first-child,
+    & > [data-hero-reveal='title'] {
+      position: relative;
+      top: clamp(64px, 8vh, 72px);
+    }
   }
 `;
 
 const ScrollLayer = styled(motion.div)`
   width: 100%;
+`;
+
+const FooterScrollLayer = styled(ScrollLayer)`
+  position: relative;
+  z-index: 20;
 `;
 
 const GreetingReveal = styled.div`
@@ -288,8 +300,8 @@ const Headline = styled.h1`
   z-index: 1;
   margin: 0;
   font-size: clamp(64px, 13.5vw, 205px);
-  line-height: 0.82;
-  letter-spacing: -0.085em;
+  line-height: 0.9;
+  letter-spacing: -0.045em;
   font-weight: 700;
   text-align: center;
   text-transform: uppercase;
@@ -299,7 +311,7 @@ const Headline = styled.h1`
 
   @media (max-width: 600px) {
     font-size: clamp(50px, 16vw, 82px);
-    letter-spacing: -0.09em;
+    letter-spacing: -0.035em;
   }
 `;
 
@@ -309,16 +321,28 @@ const HeadlineLine = styled(motion.span)`
   width: fit-content;
   margin-inline: auto;
   white-space: nowrap;
-  line-height: 0.82em;
+  line-height: 0.9em;
 
   &.role-line {
     width: 5.8em;
     margin-top: 0.14em;
   }
 
+  @media (min-width: 768px) {
+    &.role-line-ru {
+      font-size: clamp(58px, 12.2vw, 185px);
+    }
+  }
+
   @media (max-width: 767px) {
     &.role-line {
       width: 5.2em;
+    }
+  }
+
+  @media (max-width: 600px) {
+    &.role-line-ru {
+      font-size: 0.9em;
     }
   }
 `;
@@ -569,8 +593,8 @@ const MobileLanguageToggle = styled.button<{ $language: 'en' | 'ru' }>`
     padding: 3px;
     border: 2px solid var(--highlited-text);
     border-radius: 8px;
-    background: rgba(0, 0, 0, 0.24);
-    box-shadow: 0 0 18px rgba(179, 201, 135, 0.24);
+    background: rgba(var(--background-rgb), 0.24);
+    box-shadow: 0 0 18px rgba(var(--accent-rgb), 0.24);
     color: var(--text);
     font: inherit;
     font-size: 13px;
@@ -587,10 +611,11 @@ const MobileLanguageToggle = styled.button<{ $language: 'en' | 'ru' }>`
       width: calc(50% - 3px);
       border-radius: 6px 9px 9px 9px;
       background: var(--highlited-text);
-      box-shadow: 0 0 14px rgba(179, 201, 135, 0.46);
+      box-shadow: 0 0 14px rgba(var(--accent-rgb), 0.46);
       content: '';
+      pointer-events: none;
       transform: ${({ $language }) => $language === 'ru' ? 'translateX(100%)' : 'translateX(0)'};
-      transition: transform 460ms cubic-bezier(0.34, 1.56, 0.64, 1), border-radius 460ms ease;
+      transition: transform 180ms cubic-bezier(0.2, 0.7, 0.2, 1), border-radius 180ms ease;
     }
 
     span {
@@ -604,7 +629,7 @@ const MobileLanguageToggle = styled.button<{ $language: 'en' | 'ru' }>`
     }
 
     span.active {
-      color: #111;
+      color: var(--button-text);
       opacity: 1;
     }
 
@@ -625,8 +650,8 @@ const DesktopLanguageToggle = styled.button<{ $language: 'en' | 'ru' }>`
   padding: 3px;
   border: 2px solid var(--highlited-text);
   border-radius: 8px;
-  background: rgba(0, 0, 0, 0.24);
-  box-shadow: 0 0 18px rgba(179, 201, 135, 0.24);
+  background: rgba(var(--background-rgb), 0.24);
+  box-shadow: 0 0 18px rgba(var(--accent-rgb), 0.24);
   color: var(--text);
   font: inherit;
   font-size: 14px;
@@ -643,10 +668,11 @@ const DesktopLanguageToggle = styled.button<{ $language: 'en' | 'ru' }>`
     width: calc(50% - 3px);
     border-radius: 6px 9px 9px 9px;
     background: var(--highlited-text);
-    box-shadow: 0 0 14px rgba(179, 201, 135, 0.46);
+    box-shadow: 0 0 14px rgba(var(--accent-rgb), 0.46);
     content: '';
+    pointer-events: none;
     transform: ${({ $language }) => $language === 'ru' ? 'translateX(100%)' : 'translateX(0)'};
-    transition: transform 460ms cubic-bezier(0.34, 1.56, 0.64, 1), border-radius 460ms ease;
+    transition: transform 180ms cubic-bezier(0.2, 0.7, 0.2, 1), border-radius 180ms ease;
   }
 
   span {
@@ -660,7 +686,7 @@ const DesktopLanguageToggle = styled.button<{ $language: 'en' | 'ru' }>`
   }
 
   span.active {
-    color: #111;
+    color: var(--button-text);
     opacity: 1;
   }
 
@@ -1185,7 +1211,10 @@ export default function Home() {
                 <Star $language={language} data-parallax="19" className="term" src={termSrc} alt="" aria-hidden="true" />
                 {role[0]}
               </HeadlineLine>
-              <HeadlineLine className="role-line" style={{ x: secondLineX, y: secondLineY, rotate: secondLineRotate, opacity: scatterOpacity }}>
+              <HeadlineLine
+                className={language === 'ru' ? 'role-line role-line-ru' : 'role-line'}
+                style={{ x: secondLineX, y: secondLineY, rotate: secondLineRotate, opacity: scatterOpacity }}
+              >
                 <Star $language={language} data-parallax="24" className="star-bottom-right" src={star2Src} alt="" aria-hidden="true" />
                 <HeroStarAnchor ref={star2AnchorRef} $corner="bottom-right" aria-hidden="true" />
                 <Star
@@ -1202,8 +1231,9 @@ export default function Home() {
             </Headline>
           </HeadlineGroup>
         </Main>
+        <ThemeControls language={language} />
       </HeroContent>
-      <ScrollLayer style={{ y: footerY, opacity: scatterOpacity }}>
+      <FooterScrollLayer style={{ y: footerY, opacity: scatterOpacity }}>
         <Footer data-hero-reveal="footer">
           <MobileLanguageToggle
             $language={language}
@@ -1235,7 +1265,7 @@ export default function Home() {
             </div>
           </FooterLinks>
         </Footer>
-      </ScrollLayer>
+      </FooterScrollLayer>
       {typeof document !== "undefined" && createPortal(
         <>
           <AmpersandDecoration

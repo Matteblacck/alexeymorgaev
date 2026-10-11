@@ -235,75 +235,112 @@ html {
    }
  }
 /* -------------------- */
-:root {
-  --background:black;
-  --text: #ffff;
-  --button-bg: black;
-  --button-text: white;
-  --highlited-text: #b3c987;
+@property --highlited-text {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #b3c987;
 }
 
-[data-theme="light"] {
-  --background: #ffffff ;
-  --text: black;
-  --button-bg: #ffffff;
-  --button-text: #181818;
+@property --button-bg {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #b3c987;
+}
+
+@property --button-text {
+  syntax: "<color>";
+  inherits: true;
+  initial-value: #111111;
+}
+
+@property --accent-rgb {
+  syntax: "<number>#";
+  inherits: true;
+  initial-value: 179, 201, 135;
+}
+
+@property --ray-hue-shift {
+  syntax: "<angle>";
+  inherits: true;
+  initial-value: 0deg;
+}
+
+:root {
+  --background: #000000;
+  --background-rgb: 0, 0, 0;
+  --text: #ffffff;
+  --text-rgb: 255, 255, 255;
+  --button-bg: #b3c987;
+  --button-text: #111111;
   --highlited-text: #b3c987;
+  --accent-rgb: 179, 201, 135;
+  --surface: #080907;
+  --surface-border: rgba(255, 255, 255, 0.14);
+  --modal-backdrop: rgba(0, 0, 0, 0.86);
+  --header-scrim-rgb: 0, 0, 0;
+  --ray-hue-shift: 0deg;
+  --ray-opacity: 0.82;
+  transition:
+    --highlited-text 240ms ease,
+    --button-bg 240ms ease,
+    --button-text 240ms ease,
+    --accent-rgb 240ms ease,
+    --ray-hue-shift 360ms ease;
 }
 /* src/fonts/fonts.css */
 
 @font-face {
   font-family: 'Neue Montreal';
-  src: url('../assets/transfonter.org-20250321-122653/Aa NeueMontreal-Bold.woff2') format('woff2');
+  src: url('/alexeymorgaev/fonts/NeueMontreal-Bold.woff2') format('woff2');
   font-weight: bold;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Neue Montreal';
-  src: url('../assets/transfonter.org-20250321-122653/Aa NeueMontreal-BoldItalic.woff2') format('woff2');
+  src: url('/alexeymorgaev/fonts/NeueMontreal-BoldItalic.woff2') format('woff2');
   font-weight: bold;
   font-style: italic;
 }
 
 @font-face {
   font-family: 'Neue Montreal';
-  src: url('../assets/transfonter.org-20250321-122653/Aa NeueMontreal-Italic.woff2') format('woff2');
+  src: url('/alexeymorgaev/fonts/NeueMontreal-Italic.woff2') format('woff2');
   font-weight: normal;
   font-style: italic;
 }
 
 @font-face {
   font-family: 'Neue Montreal';
-  src: url('../assets/transfonter.org-20250321-122653/NeueMontreal-Light.woff2') format('woff2');
+  src: url('/alexeymorgaev/fonts/NeueMontreal-Light.woff2') format('woff2');
   font-weight: 300; /* Light */
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Neue Montreal';
-  src: url('../assets/transfonter.org-20250321-122653/NeueMontreal-LightItalic.woff2') format('woff2');
+  src: url('/alexeymorgaev/fonts/NeueMontreal-LightItalic.woff2') format('woff2');
   font-weight: 300; /* Light */
   font-style: italic;
 }
 
 @font-face {
   font-family: 'Neue Montreal';
-  src: url('../assets/transfonter.org-20250321-122653/NeueMontreal-Medium.woff2') format('woff2');
+  src: url('/alexeymorgaev/fonts/NeueMontreal-Medium.woff2') format('woff2');
   font-weight: 500; /* Medium */
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Neue Montreal';
-  src: url('../assets/transfonter.org-20250321-122653/NeueMontreal-MediumItalic.woff2') format('woff2');
+  src: url('/alexeymorgaev/fonts/NeueMontreal-MediumItalic.woff2') format('woff2');
   font-weight: 500; /* Medium */
   font-style: italic;
 }
 
 @font-face {
   font-family: 'Neue Montreal';
-  src: url('../assets/transfonter.org-20250321-122653/NeueMontreal-Regular.woff2') format('woff2');
+  src: url('/alexeymorgaev/fonts/NeueMontreal-Regular.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
 }
@@ -321,7 +358,7 @@ html {
 
 /* Фон скроллбара */
 ::-webkit-scrollbar-track {
-  background-color: black;
+  background-color: var(--background);
 }
 
 /* При наведении на ползунок */
@@ -419,7 +456,6 @@ html {
   }
 }
 html, body {
-  background-color: var(--background);
   color: var(--text);
   font-family: 'Neue Montreal', sans-serif;
   font-weight: regular;
@@ -428,7 +464,7 @@ html, body {
   background-position: 15%; 
   background-repeat: no-repeat;
   background-attachment: fixed;
-  transition: background 0.5s ease-in-out, opacity 0.5s ease-in-out;
+  transition: background-color 0.45s ease-in-out, color 0.35s ease-in-out, opacity 0.5s ease-in-out;
   overflow-x: hidden;
   width: 100%;
   max-width: 100%;
@@ -437,11 +473,13 @@ html, body {
 }
 
 html {
+  background-color: var(--background);
   overflow-y: auto;
   overscroll-behavior: none;
 }
 
 body {
+  background-color: transparent;
   overflow-y: visible;
 }
 
@@ -462,8 +500,9 @@ body {
 }
 
 @media (max-width: 480px) {
-  html, body {
-    background: var(--background);
+  html {
     background-color: var(--background);
   }
+
+  body { background: transparent; }
 }

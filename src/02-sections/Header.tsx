@@ -35,9 +35,9 @@ const HeaderContainer = styled.div`
         height: 50px;
         background: linear-gradient(
             180deg,
-            rgba(0, 0, 0, 0.24) 0%,
-            rgba(0, 0, 0, 0.14) 36%,
-            rgba(0, 0, 0, 0.06) 70%,
+            rgba(var(--header-scrim-rgb), 0.24) 0%,
+            rgba(var(--header-scrim-rgb), 0.14) 36%,
+            rgba(var(--header-scrim-rgb), 0.06) 70%,
             transparent 100%
         );
         backdrop-filter: blur(3px);
@@ -128,7 +128,7 @@ const LanguageButton = styled.button<{ $mobile?: boolean }>`
     justify-content: center;
     border: 2px solid var(--highlited-text);
     border-radius: 8px;
-    background: rgba(0, 0, 0, 0.18);
+    background: rgba(var(--background-rgb), 0.18);
     color: var(--text);
     font: inherit;
     font-size: ${({ $mobile }) => ($mobile ? '13px' : fluidText(16, 11))};
@@ -168,7 +168,7 @@ const MobileHeaderContainer = styled.div`
     .mobile-card-nav .card-nav {
         color: var(--text);
         backdrop-filter: blur(12px);
-        border-color: rgba(255, 255, 255, 0.14);
+        border-color: var(--surface-border);
     }
 
     .mobile-card-nav .card-nav-content {
@@ -180,7 +180,7 @@ const mobileNavItems: CardNavItem[] = [
     {
         label: 'MAIN',
         bgColor: '#b3c987',
-        textColor: '#050505',
+        textColor: '#111111',
         links: [
             { label: 'HOME', href: '#home', ariaLabel: 'Go to home section' },
             { label: 'ABOUT', href: '#about', ariaLabel: 'Go to about section' },
@@ -189,16 +189,16 @@ const mobileNavItems: CardNavItem[] = [
     },
     {
         label: 'WORK',
-        bgColor: '#96c8ff',
-        textColor: '#050505',
+        bgColor: '#91b8c9',
+        textColor: '#111111',
         links: [
             { label: 'EXPERIENCE', href: '#experience', ariaLabel: 'Go to experience section' },
         ],
     },
     {
         label: 'CONTACT',
-        bgColor: '#ffffff',
-        textColor: '#050505',
+        bgColor: '#d2b27a',
+        textColor: '#111111',
         links: [
             { label: 'CONTACTS', href: '#contacts', ariaLabel: 'Go to contacts section' },
         ],
@@ -272,8 +272,10 @@ export default function Header() {
             logoText="ALEXEY MORGAEV"
             logoAlt="Alexey Morgaev"
             items={mobileNavItems}
-            baseColor="rgba(0, 0, 0, 0.78)"
+            baseColor="var(--surface)"
             menuColor="var(--text)"
+            buttonBgColor="var(--highlited-text)"
+            buttonTextColor="var(--button-text)"
             rightSlot={
               <LanguageButton
                 $mobile
