@@ -1729,8 +1729,8 @@ void main() {
   background: var(--surface);
 
   @media (max-width: 520px) {
-    position: relative;
-    top: auto;
+    position: sticky;
+    top: 64px;
     width: 100%;
     justify-content: space-between;
     gap: 1px;
