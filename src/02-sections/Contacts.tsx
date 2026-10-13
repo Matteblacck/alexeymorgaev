@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { fluidText } from "../05-shared/utils";
 import { motion } from "framer-motion";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
+import { faEnvelope, faMapMarkerAlt } from "@fortawesome/free-solid-svg-icons";
 import { faTelegram, faGithub, faVk } from "@fortawesome/free-brands-svg-icons";
 import { useLanguage } from "../05-shared/useLanguage";
 
@@ -100,15 +100,15 @@ const ContactsWrapper = styled.div`
 
 const SocialLinks = styled.div`
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0.85rem;
   max-width: 1000px;
 
-  @media (max-width: 900px) {
+  @media (max-width: 1100px) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  @media (max-width: 520px) {
+  @media (max-width: 740px) {
     grid-template-columns: 1fr;
   }
 `;
@@ -169,8 +169,14 @@ const SocialLink = styled.a`
 
   .link-copy strong {
     font-size: ${fluidText(20, 17)};
-    font-weight: 600;
+    font-weight: 500;
     line-height: 1.1;
+  }
+
+  .link-copy strong.email-address {
+    font-size: ${fluidText(14, 12)};
+    letter-spacing: -0.035em;
+    white-space: nowrap;
   }
 
   .link-copy small {
@@ -407,14 +413,6 @@ export default function Contacts() {
           >
             <ContactsWrapper>
               <SocialLinks>
-                <SocialLink href="https://github.com/matteblacck" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile">
-                  <span className="social-icon"><FontAwesomeIcon icon={faGithub} /></span>
-                  <span className="link-copy">
-                    <strong>GitHub</strong>
-                    <small>{language === "en" ? "OPEN PROFILE" : "ОТКРЫТЬ ПРОФИЛЬ"}</small>
-                  </span>
-                  <span className="link-arrow" aria-hidden="true">↗</span>
-                </SocialLink>
                 <SocialLink href="https://t.me/morgaev" target="_blank" rel="noopener noreferrer" aria-label="Telegram">
                   <span className="social-icon"><FontAwesomeIcon icon={faTelegram} /></span>
                   <span className="link-copy">
@@ -423,10 +421,26 @@ export default function Contacts() {
                   </span>
                   <span className="link-arrow" aria-hidden="true">↗</span>
                 </SocialLink>
+                <SocialLink href="mailto:alexeymorgaevdev@gmail.com" aria-label="Email Alexey Morgaev">
+                  <span className="social-icon"><FontAwesomeIcon icon={faEnvelope} /></span>
+                  <span className="link-copy">
+                    <strong className="email-address">alexeymorgaevdev@gmail.com</strong>
+                    <small>{language === "en" ? "SEND AN EMAIL" : "НАПИСАТЬ НА ПОЧТУ"}</small>
+                  </span>
+                  <span className="link-arrow" aria-hidden="true">↗</span>
+                </SocialLink>
                 <SocialLink href="https://vk.com/matteblackk" target="_blank" rel="noopener noreferrer" aria-label="VK profile">
                   <span className="social-icon"><FontAwesomeIcon icon={faVk} /></span>
                   <span className="link-copy">
                     <strong>VK</strong>
+                    <small>{language === "en" ? "OPEN PROFILE" : "ОТКРЫТЬ ПРОФИЛЬ"}</small>
+                  </span>
+                  <span className="link-arrow" aria-hidden="true">↗</span>
+                </SocialLink>
+                <SocialLink href="https://github.com/matteblacck" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile">
+                  <span className="social-icon"><FontAwesomeIcon icon={faGithub} /></span>
+                  <span className="link-copy">
+                    <strong>GitHub</strong>
                     <small>{language === "en" ? "OPEN PROFILE" : "ОТКРЫТЬ ПРОФИЛЬ"}</small>
                   </span>
                   <span className="link-arrow" aria-hidden="true">↗</span>

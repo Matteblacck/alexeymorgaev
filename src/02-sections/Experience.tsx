@@ -1269,25 +1269,6 @@ const ContactBridgeText = styled.p`
   opacity: 0.68;
 `;
 
-const ContactBridgeEmail = styled.a`
-  display: inline-block;
-  margin-top: 14px;
-  color: var(--highlited-text);
-  font-size: ${fluidText(16, 14)};
-  text-decoration: none;
-  text-underline-offset: 4px;
-
-  &:hover,
-  &:focus-visible {
-    text-decoration: underline;
-  }
-
-  &:focus-visible {
-    outline: 1px solid var(--highlited-text);
-    outline-offset: 4px;
-  }
-`;
-
 const ContactBridgeLink = styled.a`
   position: relative;
   z-index: 1;
@@ -2393,9 +2374,6 @@ export default function Experience() {
                   ? "I'll build it from interface and backend to integrations and production."
                   : "Реализую вашу идею целиком: от интерфейса и серверной части до интеграций и запуска."}
               </ContactBridgeText>
-              <ContactBridgeEmail href="mailto:alexeymorgaevdev@gmail.com">
-                alexeymorgaevdev@gmail.com
-              </ContactBridgeEmail>
             </ContactBridgeCopy>
             <ContactBridgeLink
               href="#contacts"
