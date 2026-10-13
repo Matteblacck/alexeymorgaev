@@ -3296,11 +3296,11 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
   gap: 0.85rem;
   max-width: 1000px;
 
-  @media (max-width: 900px) {
+  @media (max-width: 1100px) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  @media (max-width: 520px) {
+  @media (max-width: 740px) {
     grid-template-columns: 1fr;
   }
 `,D0=I.a`
@@ -3359,13 +3359,14 @@ In order to be iterable, non-array objects must have a [Symbol.iterator]() metho
 
   .link-copy strong {
     font-size: ${je(20,17)};
-    font-weight: 600;
+    font-weight: 500;
     line-height: 1.1;
   }
 
   .link-copy strong.email-address {
-    font-size: ${je(16,14)};
-    overflow-wrap: anywhere;
+    font-size: ${je(14,12)};
+    letter-spacing: -0.035em;
+    white-space: nowrap;
   }
 
   .link-copy small {
